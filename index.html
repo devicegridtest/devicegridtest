@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Servicio profesional de testeo de apps móviles Android e iOS en dispositivos reales.">
+  <meta name="keywords" content="testing, apps móviles, Android, iOS, QA, automatización, dispositivos reales">
+  <meta name="author" content="DeviceGrid.org">
+  <title>devicegridtest | Control Panel</title>
+  <link rel="icon" href="icons/favicon.ico" type="image/ico">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Configuración de Tailwind -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: {
+            'scroll': 'scroll 45s linear infinite',
+            'fadeInUp': 'fadeInUp 1s ease-out',
+            'pulse-neon': 'pulse 2s infinite'
+          },
+          keyframes: {
+            scroll: {
+              '0%': { transform: 'translateX(0)' },
+              '100%': { transform: 'translateX(-50%)' }
+            },
+            fadeInUp: {
+              '0%': { opacity: 0, transform: 'translateY(30px)' },
+              '100%': { opacity: 1, transform: 'translateY(0)' }
+            },
+            pulse: {
+              '0%, 90%': { opacity: 1 },
+              '50%': { opacity: 0.8 }
+            }
+          },
+          boxShadow: {
+            'neon-cyan': '0 0 20px rgba(0, 255, 255, 0.3)',
+            'neon-green': '0 0 20px rgba(0, 255, 136, 0.4)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Estilos personalizados -->
+  <link rel="stylesheet" href="main.css">
+</head>
+<body class="bg-black text-white font-sans relative">
+
+  <!-- 📡 Scanline Futurista -->
+  <div class="scanline"></div>
+
+  <!-- 📊 BARRA DE CRIPTO CON VIDEO DE FONDO -->
+  <section id="crypto-container" class="relative w-full h-16 overflow-hidden mb-12">
+    <!-- Video de fondo -->
+    <video 
+      autoplay 
+      muted 
+      loop 
+      playsinline 
+      class="absolute inset-0 w-full h-full object-cover opacity-90"
+    >
+      <source src="icons/barrasuperior.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+
+    <!-- Contenido de precios -->
+    <div id="crypto-bar" class="relative z-10 h-full flex items-center">
+      <div class="flex animate-scroll text-sm font-mono uppercase">
+        <!-- Primera copia -->
+        <div class="flex gap-8">
+          <div id="bitcoin" class="crypto-item">
+            <img src="icons/bitcoin.webp" alt="BTC" class="w-5 h-5" />
+            <span class="font-semibold text-yellow-400">BTC:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="nexa" class="crypto-item">
+            <img src="icons/nexa.logo.jpg" alt="NEXA" class="w-5 h-5" />
+            <span class="font-semibold text-pink-400">NEXA:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="dogecoin" class="crypto-item">
+            <img src="icons/doge.logo.jpeg" alt="DOGE" class="w-5 h-5" />
+            <span class="font-semibold text-yellow-400">DOGE:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="solana" class="crypto-item">
+            <img src="icons/Solana_logo.png" alt="SOL" class="w-5 h-5" />
+            <span class="font-semibold text-pink-400">SOL:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="litecoin" class="crypto-item">
+            <img src="icons/ltc.logo.webp" alt="LTC" class="w-5 h-5" />
+            <span class="font-semibold text-yellow-400">LTC:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="ripple" class="crypto-item">
+            <img src="icons/rippel.logo.png" alt="XRP" class="w-5 h-5" />
+            <span class="font-semibold text-pink-400">XRP:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="nodle" class="crypto-item">
+            <img src="icons/nodle_logo.jpeg" alt="NODLE" class="w-5 h-5" />
+            <span class="font-semibold text-yellow-400">NODLE:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="ethereum" class="crypto-item">
+            <img src="icons/ethereum.logo.png" alt="ETH" class="w-5 h-5" />
+            <span class="font-semibold text-pink-400">ETH:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+        </div>
+        <!-- Segunda copia (scroll infinito) -->
+        <div class="flex gap-8">
+          <div id="bitcoin" class="crypto-item">
+            <img src="icons/bitcoin.webp" alt="BTC" class="w-5 h-5" />
+            <span class="font-semibold text-yellow-400">BTC:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="ethereum" class="crypto-item">
+            <img src="icons/ethereum.logo.png" alt="ETH" class="w-5 h-5" />
+            <span class="font-semibold text-pink-400">ETH:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="dogecoin" class="crypto-item">
+            <img src="icons/doge.logo.jpeg" alt="DOGE" class="w-5 h-5" />
+            <span class="font-semibold text-yellow-400">DOGE:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="solana" class="crypto-item">
+            <img src="icons/Solana_logo.png" alt="SOL" class="w-5 h-5" />
+            <span class="font-semibold text-pink-400">SOL:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="litecoin" class="crypto-item">
+            <img src="icons/ltc.logo.webp" alt="LTC" class="w-5 h-5" />
+            <span class="font-semibold text-yellow-400">LTC:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="ripple" class="crypto-item">
+            <img src="icons/rippel.logo.png" alt="XRP" class="w-5 h-5" />
+            <span class="font-semibold text-pink-400">XRP:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="nexa" class="crypto-item">
+            <img src="icons/nexa.logo.jpg" alt="NEXA" class="w-5 h-5" />
+            <span class="font-semibold text-pink-400">NEXA:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="nodle" class="crypto-item">
+            <img src="icons/nodle_logo.jpeg" alt="NODLE" class="w-5 h-5" />
+            <span class="font-semibold text-yellow-400">NODLE:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🎬 Hero Section -->
+  <header class="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
+    <video class="absolute inset-0 w-full h-full object-cover z-0" autoplay loop muted playsinline>
+      <source src="icons/imagen principal.mp4" type="video/mp4">
+    </video>
+    <div class="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
+    <div class="relative z-20 text-center px-6 py-12 max-w-4xl mx-auto space-y-8 animate-fadeInUp">
+      <img src="icons/logo1.png" alt="Logo DeviceGrid" class="w-32 h-32 mx-auto rounded-full border-4 border-cyan-400 mb-6 shadow-[0_0_40px_#00ffff] pulse-neon" />
+      <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 drop-shadow-lg">
+        DeviceGridTest
+      </h1>
+      <p class="mt-4 text-2xl text-gray-200 max-w-2xl mx-auto leading-relaxed">
+        Connect. Control. Automate. The Future of Mobile Testing.
+      </p>
+
+      <!-- Control Panel Button -->
+      <section class="text-center animate-fadeInUp" style="animation-delay: 0.6s">
+        <a href="#" onclick="openControlPanel(); return false;"
+           class="inline-block bg-gradient-to-r from-purple-600 via-blue-500 to-indigo-700 text-white font-bold py-5 px-12 rounded-full text-xl tracking-wide shadow-[0_0_30px_rgba(138,43,226,0.6)] hover:shadow-[0_0_50px_rgba(138,43,226,0.8)] transition-all duration-300 candy-pulse border-2 border-purple-400">
+          🎮 OPEN CONTROL PANEL v8.0 PRO
+        </a>
+      </section>
+
+      <!-- 🔗 Barra Superior - Botones -->
+      <nav class="py-4 bg-gradient-to-r from-blue-600 via-purple-500 to-indigo-600 rounded-full border-b border-cyan-500/30 mt-8">
+        <div class="flex flex-wrap justify-center items-center gap-4 max-w-4xl mx-auto px-4">
+          <a href="guia para herramienta.html" target="_blank"
+             class="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-cyan-500 hover:from-cyan-500 hover:to-green-500 text-black font-bold py-2 px-5 rounded-full transition-all duration-300 neon-btn">
+            <img src="icons/device-gamepad-2.svg" alt="Icono artículo" class="w-5 h-5"> ¿How it works?
+          </a>
+          <a href="https://hub.acurast.com/rebellion?ref=xba4aq" target="_blank"
+             class="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-cyan-500 hover:from-cyan-500 hover:to-green-500 text-black font-bold py-2 px-5 rounded-full transition-all duration-300 neon-btn">
+            <img src="icons/device-mobile (1).svg" alt="Icono explorar" class="w-5 h-5"> Explore Acurast →
+          </a>
+          <a href="adb_article.html" target="_blank"
+             class="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-cyan-500 hover:from-cyan-500 hover:to-green-500 text-black font-bold py-2 px-5 rounded-full transition-all duration-300 neon-btn">
+            <img src="icons/code.svg" alt="Icono ADB" class="w-5 h-5"> ¿What it is ADB? →
+          </a>
+            <a href="Faucet/frontend/index.html" target="_blank"
+             class="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-cyan-500 hover:from-cyan-500 hover:to-green-500 text-black font-bold py-2 px-5 rounded-full transition-all duration-300 neon-btn">
+            <img src="icons/code.svg" alt="Icono ADB" class="w-5 h-5"> Faucet →
+          </a>
+            <a href="LLM/index.html" target="_blank"
+             class="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-cyan-500 hover:from-cyan-500 hover:to-green-500 text-black font-bold py-2 px-5 rounded-full transition-all duration-300 neon-btn">
+            <img src="icons/code.svg" alt="Icono ADB" class="w-5 h-5"> CHAT BOT →
+          </a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 🎥 Sección Principal -->
+  <main class="relative py-20 px-6 text-white">
+    <div class="max-w-6xl mx-auto space-y-20">
+
+      <!-- Descargar desde GitHub -->
+      <section class="hologram rounded-2xl p-1 animate-fadeInUp" style="animation-delay: 0.9s">
+        <div class="bg-gray-900 rounded-2xl p-8">
+          <h3 class="text-2xl font-bold text-blue-400 mb-4 text-center flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 27.807 24 23.308 24 18c0-6.627-5.373-12-12-12z"/>
+            </svg>
+            DOWNLOAD THE PROJECT
+          </h3>
+          <p class="text-gray-300 text-center mb-6">
+            Clone or download source code from GitHub.
+          </p>
+          <div class="text-center">
+            <a href="https://github.com/devicegridtest/control-panel" target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-3 bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-800 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 shadow-lg border border-gray-500">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.464-1.336-5.464-5.93 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.983-.399 3-.405 1.017.006 2.043.139 3 .405 2.291-1.552 3.299-1.23 3.299-1.23.653 1.653.243 3.176.119 3.476.768.84 1.235 1.91 1.235 3.221 0 4.609-2.799 5.64-5.468 5.937.428.366.817 1.103.817 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+            Go to GitHub Repository
+            </a>
+          </div>
+          <p class="text-xs text-gray-400 mt-3 text-center">
+            <strong>Guía:</strong> Usa <code class="text-green-400">git clone https://github.com/devicegridtest/control-panel</code> or download theZIP.
+          </p>
+        </div>
+      </section>
+
+      <!-- Estado en Tiempo Real -->
+      <section class="hologram rounded-2xl p-1 animate-fadeInUp" style="animation-delay: 1.2s">
+        <div class="bg-gray-900 rounded-2xl p-8">
+          <h3 class="text-2xl font-bold text-cyan-400 mb-6 text-center flex items-center justify-center gap-2">
+            <span>📡</span> DEVICE STATUS
+          </h3>
+          <div id="status-panel" class="text-gray-300 space-y-3 font-mono text-sm text-left max-w-2xl mx-auto p-4 bg-black rounded-lg">
+           Charging...
+          </div>
+        </div>
+      </section>
+
+      <!-- Subir Assets -->
+      <section class="hologram rounded-2xl p-1 animate-fadeInUp" style="animation-delay: 1.5s">
+        <div class="bg-gray-900 rounded-2xl p-8">
+          <h3 class="text-2xl font-bold text-pink-400 mb-6 text-center flex items-center justify-center gap-2">
+            <span>📤</span> UPLOAD ASSETS
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            <div class="bg-gray-800 p-6 rounded-xl border border-green-500/30">
+              <h4 class="text-green-400 font-semibold mb-3 text-center">🖼️ Test Template</h4>
+              <input type="file" id="template-upload" accept="image/*" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-600 file:text-white hover:file:bg-green-700 mb-3" />
+              <button onclick="uploadTemplate()" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md font-semibold transition neon-btn">
+               Upload template
+              </button>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl border border-blue-500/30">
+              <h4 class="text-blue-400 font-semibold mb-3 text-center">🎥 Test Video</h4>
+              <input type="file" id="video-upload" accept="video/*" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 mb-3" />
+              <button onclick="uploadVideo()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md font-semibold transition neon-btn">
+                Upload Video
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Live Stream -->
+      <section class="text-center animate-fadeInUp" style="animation-delay: 0.3s">
+        <h2 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500 mb-8">
+          🚀 LIVE STREAM & CONTROL
+        </h2>
+        <p class="text-lg text-gray-300 max-w-3xl mx-auto mb-8">
+          Watch real-time testing on multiple devices and interact directly from our Discord community.
+        </p>
+        <div class="hologram max-w-2xl mx-auto p-1">
+          <div class="bg-gray-900 rounded-2xl p-6">
+            <iframe src="https://discord.com/widget?id=1215012325585719336&theme=dark"
+                    width="100%" height="400"
+                    allowtransparency="true"
+                    frameborder="0"
+                    sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+                    class="w-full h-[400px] rounded-xl border border-gray-700">
+            </iframe>
+          </div>
+        </div>
+        <a href="https://discord.gg/zsBukhFp" target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-purple-600 hover:to-indigo-600 text-white font-bold py-4 px-8 rounded-full transition-all duration-300 neon-btn mt-8">
+          <img src="icons/brand-discord.svg" alt="Discord Icon" class="w-7 h-7"> Join the Stream
+        </a>
+      </section>
+    </div>
+  </main>
+
+  <!-- 📞 Contacto -->
+  <section id="contacto" class="py-20 px-6">
+    <div class="max-w-lg mx-auto text-center animate-fadeInUp" style="animation-delay: 1.8s">
+      <h2 class="text-4xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">CONTACT SUPPORT</h2>
+      <div class="hologram rounded-2xl p-1">
+        <div class="bg-gray-900 rounded-2xl p-8">
+          <form id="contactForm" action="https://formspree.io/f/myzjqrdg" method="POST" class="space-y-5">
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-300 text-left">Name</label>
+              <input type="text" name="name" id="name" required class="w-full px-5 py-3 rounded-lg bg-gray-800 border border-cyan-500 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400" />
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-300 text-left">Email</label>
+              <input type="email" name="email" id="email" required class="w-full px-5 py-3 rounded-lg bg-gray-800 border border-cyan-500 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400" />
+            </div>
+            <div>
+              <label for="message" class="block text-sm font-medium text-gray-300 text-left">Message</label>
+              <textarea name="message" id="message" required rows="4" class="w-full px-5 py-3 rounded-lg bg-gray-800 border border-cyan-500 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-cyan-500 hover:from-cyan-500 hover:to-green-500 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 neon-btn">
+              Send
+            </button>
+            <div id="form-message" class="mt-4 text-cyan-300 font-semibold"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🧑‍💻 Footer -->
+  <footer class="py-8 text-center text-sm text-gray-500 border-t border-cyan-700/30">
+    <div class="max-w-4xl mx-auto">
+      &copy; 2025 <span class="text-cyan-400 font-bold">devicegridtest.org</span> | Advanced Mobile Testing & Automation Platform
+    </div>
+  </footer>
+
+  <!-- ✨ Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@3.3.0/tsparticles.bundle.min.js"></script>
+  <script src="componentes.js"></script>
+
+  <script>
+    // 🔗 Cambia esto por tu URL pública cuando lo despliegues
+    const API_BASE = 'http://localhost:8000'; // Usa 'https://tu-backend.onrender.com' en producción
+
+    // Bloquear clic derecho y atajos
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && ['c', 'u', 's', 'a'].includes(e.key.toLowerCase())) {
+        e.preventDefault();
+      }
+    });
+
+    function getAuthHeaders() {
+      return { "Authorization": "Basic " + btoa("admin:devicegrid2025") };
+    }
+
+    async function updateStatus() {
+      try {
+        const res = await fetch(`${API_BASE}/api/status`, { headers: getAuthHeaders() });
+        const data = await res.json();
+        const panel = document.getElementById('status-panel');
+        panel.innerHTML = `
+          <p><strong>📱 Dispositivos Activos:</strong> ${data.devices.length}</p>
+          <p><strong>❤️ Bots de Likes:</strong> ${data.bots.likes}</p>
+          <p><strong>💬 Bots de Comentarios:</strong> ${data.bots.comments}</p>
+          ${data.devices.map(d => `<p class="text-green-400 flex items-center gap-2"><span>🟢</span> ${d}</p>`).join('')}
+        `;
+      } catch (e) {
+        document.getElementById('status-panel').innerHTML = "<p class='text-red-400 flex items-center gap-2'><span>❌</span> Backend fuera de línea</p>";
+      }
+      setTimeout(updateStatus, 3000);
+    }
+
+    async function uploadTemplate() {
+      const file = document.getElementById('template-upload').files[0];
+      if (!file) return alert("Selecciona un archivo primero.");
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch(`${API_BASE}/upload/template`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: formData
+      });
+      if (res.ok) alert("✅ Plantilla subida correctamente");
+      else alert("❌ Error al subir");
+    }
+
+    async function uploadVideo() {
+      const file = document.getElementById('video-upload').files[0];
+      if (!file) return alert("Selecciona un archivo primero.");
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch(`${API_BASE}/upload/video`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: formData
+      });
+      if (res.ok) alert("✅ Video subido correctamente");
+      else alert("❌ Error al subir");
+    }
+
+    function openControlPanel() {
+      if (confirm("¿Deseas iniciar el Panel de Control TikTok v8.0 PRO?")) {
+        fetch(`${API_BASE}/api/start`, { method: 'POST', headers: getAuthHeaders() })
+          .then(res => res.json())
+          .then(data => alert("✅ " + data.message))
+          .catch(() => alert("⚠️ Ejecuta 'python run_backend.py' en tu terminal"));
+      }
+    }
+
+    // Iniciar actualización de estado
+    document.addEventListener('DOMContentLoaded', () => {
+      updateStatus();
+    });
+  </script>
+</body>
+</html>

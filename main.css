@@ -1,0 +1,177 @@
+
+    /* ✅ RESTAURAMOS TUS ESTILOS ORIGINALES + MEJORAS FUTURISTAS */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* 🌐 Animación de scroll horizontal (cripto) */
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .animate-scroll {
+      animation: scroll 45s linear infinite;
+      min-width: max-content;
+      display: flex;
+      white-space: nowrap;
+    }
+
+    /* 💡 Efectos Neón Personalizados */
+    @keyframes pulse-neon {
+      0%, 100% {
+        box-shadow: 0 0 15px #0ff, 0 0 30px #0ff;
+      }
+      50% {
+        box-shadow: 0 0 25px #0ff, 0 0 45px #0ff;
+      }
+    }
+    .pulse-neon {
+      animation: pulse-neon 2s infinite;
+    }
+
+    @keyframes green-pulse {
+      0%, 100% {
+        box-shadow: 0 0 6px #00ff88, 0 0 12px #00ff88;
+      }
+      50% {
+        box-shadow: 0 0 12px #00ff88, 0 0 24px #00ff88;
+      }
+    }
+    .green-neon {
+      animation: green-pulse 2s infinite;
+    }
+
+    @keyframes candy-glow {
+      0%, 100% {
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 0 25px rgba(0,255,128,0.6);
+      }
+      50% {
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 0 35px rgba(0,255,128,0.9);
+      }
+    }
+    .candy-pulse {
+      animation: candy-glow 2s infinite;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fadeInUp {
+      animation: fadeInUp 1.2s ease-out both;
+    }
+
+    /* 🎇 Efecto Holograma Futurista */
+    .hologram {
+      position: relative;
+      background: rgba(0, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      border-radius: 1rem;
+    }
+
+    .hologram::before {
+      content: '';
+      position: absolute;
+      top: -2px; left: -2px; right: -2px; bottom: -2px;
+      background: linear-gradient(45deg, #00ffff, #b026ff, #00ffff);
+      z-index: -1;
+      filter: blur(10px);
+      opacity: 0.7;
+      animation: rotate 4s linear infinite;
+      border-radius: 1.1rem;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* 📡 Scanline Futurista */
+    .scanline {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(0, 255, 255, 0.05) 50%,
+        transparent 100%);
+      animation: scan 3s linear infinite;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+
+    /* 🎨 Botones con Neón */
+    .neon-btn {
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.7);
+    }
+    .neon-btn:hover {
+      box-shadow: 0 0 20px rgba(34, 197, 94, 1), 0 0 30px rgba(0, 255, 255, 0.8);
+      transform: translateY(-3px);
+    }
+
+    /* 🖥️ Sección de Cripto con Video */
+    #crypto-container {
+      position: relative;
+      height: 4rem;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(23, 136, 19, 0.2);
+    }
+
+    #crypto-bar {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+    }
+
+    #crypto-bar video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.15;
+      z-index: 0;
+    }
+
+    .crypto-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-right: 2rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
