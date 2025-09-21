@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexa Faucet | Get NEXA FREE</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">💧 Nexa Faucet</div>
+            <a href="https://discord.gg/zsBukhFp" class="discord-btn" target="_blank">
+                <img src="https://devicegridtest.org/icons/brand-discord.svg" alt="Discord">
+                Join Discord
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Receive <strong>0.01 NEXA</strong> free every <strong>24 hours</strong></h1>
+            <p>Perfect for developers, testers and the curious. No tricks, no spam!</p>
+        </div>
+    </section>
+
+    <!-- Balance Banner -->
+    <div class="container">
+        <div class="balance-banner">
+            💰 Available Balance: <span id="balance">Charging...</span> NEXA
+        </div>
+    </div>
+
+    <!-- Faucet Form Section -->
+    <section class="faucet-section">
+        <div class="container">
+            <div class="card">
+                <h2>⬇️ Request your NEXA</h2>
+                <div class="faucet-form">
+                    <input type="text" id="address" placeholder="nexa:You_address_here..." required>
+                    <button id="requestBtn">Request 0.01 NEXA</button>
+                </div>
+                <div id="message" class="message"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Transactions Section -->
+    <section class="live-section">
+        <div class="container">
+            <h2>📡 Latest transactions</h2>
+            <div class="live-grid" id="transactionsGrid">
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guide Section -->
+    <section class="guide-section">
+        <div class="container">
+            <h2>📌 ¿How it works?</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>Get a Nexa address</h3>
+                        <p>Use a wallet like Nexa Wallet, Liquality, or create one on testnet.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>Glue it up</h3>
+                        <p>Copy and paste your address starting with<code>nexa:</code></p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>¡Get Funded!</h3>
+                        <p>In seconds you will receive 0.01 NEXA. Limit: 1 time every 24 hours.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donation Section -->
+    <section class="donation-section">
+        <div class="container">
+            <h2>❤️ ¿You want to support this faucet?</h2>
+            <p>¡Donations keep this service free for everyone!</p>
+            <div class="donation-card">
+                <div class="address-display">
+                    <code id="donationAddress">Charging...</code>
+                    <button id="copyBtn" class="copy-btn">📋Copy</button>
+                </div>
+                <p class="note">Send NEXA to this address to recharge the faucet.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Panel (oculto por defecto) -->
+    <div id="adminPanel" class="admin-panel">
+        <div class="admin-header">
+            <h3>🔐 Dashboard</h3>
+            <button id="closeAdmin">✖️</button>
+        </div>
+        <div class="admin-content">
+            <p><strong>🔑Faucet Address:</strong> <code id="adminAddress">Charging...</code></p>
+            <p><strong>💰Available Balance:</strong> <span id="adminBalance">Charging...</span> NEXA</p>
+            
+            <h4>📊 Last 10 requests</h4>
+            <div id="adminTransactions" style="max-height: 200px; overflow-y: auto; margin: 10px 0; padding: 10px; background: #1a1a22; border-radius: 8px;">
+                <p>Loading transactions...</p>
+            </div>
+
+            <h4>⚙️ Acciones rápidas</h4>
+            <button id="reloadFaucet" class="btn btn-success">🔄 Recharge Faucet</button>
+            <button id="clearCooldown" class="btn btn-warning">🧹 Clear Cooldown</button>
+            <p><small>⚠️ ¡For Admins!</small></p>
+        </div>
+        <div class="admin-password">
+            <input type="password" id="adminPassword" placeholder="Ingresa contraseña de admin..." />
+            <button id="loginAdmin">🔓 Log inr</button>
+        </div>
+    </div>
+
+    <!-- Botón flotante para abrir panel -->
+    <button id="openAdminBtn" class="admin-btn">🛠️ Admin</button>
+
+    <script src="script.js"></script
