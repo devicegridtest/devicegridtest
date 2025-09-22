@@ -11,12 +11,13 @@
     "node": "20.15.1"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.0",
+    "@mlc-ai/web-llm": "^0.2.79",
     "axios": "^1.7.2",
     "bip39": "^3.0.5",
-    "bitcoinjs-lib": "^6.1.0",  
+    "bitcoinjs-lib": "^6.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.2",
     "sqlite3": "^5.1.0"
   },
   "devDependencies": {
