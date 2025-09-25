@@ -1,0 +1,21 @@
+{
+  "name": "Chat LLM Local - DeviceGridTest",
+  "short_name": "LLM Chat",
+  "description": "Chat con IA 100% local, sin internet, sin servidor",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#00f7ff",
+  "icons": [
+    {
+      "src": "/icons/logo1.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/logo1.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
