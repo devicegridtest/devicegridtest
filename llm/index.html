@@ -2,7 +2,7 @@
 <html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🤖 Chat LLM Local | DeviceGridTest</title>
     <link rel="icon" href="https://devicegridtest.org/icons/favicon.ico" type="image/ico">
     <link rel="manifest" href="/manifest.json">
@@ -34,22 +34,10 @@
                         'neonPulse': 'neonPulse 3s ease-in-out infinite'
                     },
                     keyframes: {
-                        pulse: {
-                            '0%, 90%': { opacity: 1 },
-                            '50%': { opacity: 0.8 }
-                        },
-                        fadeInUp: {
-                            '0%': { opacity: 0, transform: 'translateY(30px)' },
-                            '100%': { opacity: 1, transform: 'translateY(0)' }
-                        },
-                        loading: {
-                            '0%': { transform: 'translateX(-100%)' },
-                            '100%': { transform: 'translateX(100%)' }
-                        },
-                        scanline: {
-                            '0%': { transform: 'translateY(-100%)' },
-                            '100%': { transform: 'translateY(100%)' }
-                        },
+                        pulse: { '0%, 90%': { opacity: 1 }, '50%': { opacity: 0.8 } },
+                        fadeInUp: { '0%': { opacity: 0, transform: 'translateY(30px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
+                        loading: { '0%': { transform: 'translateX(-100%)' }, '100%': { transform: 'translateX(100%)' } },
+                        scanline: { '0%': { transform: 'translateY(-100%)' }, '100%': { transform: 'translateY(100%)' } },
                         neonPulse: {
                             '0%, 100%': { textShadow: '0 0 5px rgba(0, 247, 255, 0.7), 0 0 10px rgba(0, 247, 255, 0.5)' },
                             '50%': { textShadow: '0 0 10px rgba(0, 247, 255, 1), 0 0 20px rgba(0, 247, 255, 0.8)' }
@@ -65,6 +53,7 @@
         }
     </script>
     <style>
+        /* ... (todos tus estilos se mantienen igual) ... */
         body {
             background: #0a0a0f;
             color: #00f7ff;
@@ -74,7 +63,6 @@
             overflow-x: hidden;
             position: relative;
         }
-
         body::before {
             content: '';
             position: fixed;
@@ -88,7 +76,6 @@
             z-index: 1000;
             opacity: 0.3;
         }
-
         .scanline {
             position: fixed;
             top: 0;
@@ -100,7 +87,6 @@
             pointer-events: none;
             animation: scanline 4s linear infinite;
         }
-
         .loading-bar {
             height: 4px;
             background: linear-gradient(90deg, #00ffff, #ff00ff, #00ff88);
@@ -108,7 +94,6 @@
             overflow: hidden;
             border-radius: 2px;
         }
-
         .loading-bar::after {
             content: '';
             position: absolute;
@@ -119,17 +104,14 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
             animation: loading 1.5s infinite;
         }
-
         .message {
             display: flex;
             margin-bottom: 16px;
             animation: fadeInUp 0.5s ease-out;
         }
-
         .message.user {
             justify-content: flex-end;
         }
-
         .message-content {
             max-width: 80%;
             padding: 16px 20px;
@@ -140,7 +122,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .message.user .message-content {
             background: linear-gradient(135deg, #1e40af, #3b82f6);
             color: #ffffff !important;
@@ -148,7 +129,6 @@
             box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
             border: 1px solid rgba(59, 130, 246, 0.5);
         }
-
         .message.bot .message-content {
             background: linear-gradient(135deg, #166534, #22c55e);
             color: #ccff00 !important;
@@ -157,7 +137,6 @@
             border: 1px solid rgba(34, 197, 94, 0.5);
             animation: neonPulse 3s ease-in-out infinite;
         }
-
         .avatar {
             width: 40px;
             height: 40px;
@@ -171,32 +150,26 @@
             border: 2px solid #3b82f6;
             box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
         }
-
         .user .avatar {
             background: #dbeafe;
             color: #1e40af;
             border-color: #3b82f6;
         }
-
         .bot .avatar {
             background: #dcfce7;
             color: #166534;
             border-color: #22c55e;
         }
-
         .chat-container::-webkit-scrollbar {
             width: 6px;
         }
-
         .chat-container::-webkit-scrollbar-track {
             background: #0f0f15;
         }
-
         .chat-container::-webkit-scrollbar-thumb {
             background: #3b82f6;
             border-radius: 3px;
         }
-
         .model-selector {
             background: #1a1a22;
             border: 1px solid #334155;
@@ -205,7 +178,6 @@
             margin-bottom: 24px;
             box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
         }
-
         .model-selector h3 {
             color: #a855f7;
             margin-bottom: 16px;
@@ -214,14 +186,12 @@
             align-items: center;
             gap: 8px;
         }
-
         .model-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 12px;
             margin-bottom: 16px;
         }
-
         .model-btn {
             padding: 12px 16px;
             background: #2d2d3d;
@@ -236,22 +206,23 @@
             align-items: center;
             gap: 8px;
         }
-
-        .model-btn:hover {
+        .model-btn:hover:not(:disabled) {
             background: #3b82f6;
             border-color: #3b82f6;
             transform: translateY(-2px);
             box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
             color: #ffffff;
         }
-
         .model-btn.active {
             background: #3b82f6;
             border-color: #3b82f6;
             box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
             color: #ffffff;
         }
-
+        .model-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
         .status-bar {
             background: #1a1a22;
             border: 1px solid #334155;
@@ -264,7 +235,6 @@
             align-items: center;
             gap: 12px;
         }
-
         .settings-panel {
             background: #1a1a22;
             border: 1px solid #334155;
@@ -273,7 +243,6 @@
             margin-bottom: 24px;
             box-shadow: 0 0 20px rgba(255, 192, 203, 0.2);
         }
-
         .settings-panel h3 {
             color: #f472b6;
             margin-bottom: 16px;
@@ -282,13 +251,11 @@
             align-items: center;
             gap: 8px;
         }
-
         .settings-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 12px;
         }
-
         .setting-item label {
             font-size: 0.9rem;
             color: #00f7ff;
@@ -296,7 +263,6 @@
             align-items: center;
             gap: 4px;
         }
-
         .setting-item input, .setting-item select {
             padding: 8px 12px;
             background: #2d2d3d;
@@ -305,13 +271,11 @@
             border-radius: 6px;
             font-size: 0.9rem;
         }
-
         .action-buttons {
             display: flex;
             gap: 12px;
             margin-top: 16px;
         }
-
         .action-btn {
             padding: 8px 16px;
             border: none;
@@ -325,27 +289,22 @@
             align-items: center;
             gap: 6px;
         }
-
         .action-btn.export {
             background: linear-gradient(135deg, #a855f7, #8b5cf6);
             box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
         }
-
         .action-btn.export:hover {
             transform: translateY(-2px);
             box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
         }
-
         .action-btn.clear {
             background: linear-gradient(135deg, #ef4444, #dc2626);
             box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
         }
-
         .action-btn.clear:hover {
             transform: translateY(-2px);
             box-shadow: 0 0 25px rgba(239, 68, 68, 0.5);
         }
-
         @media (max-width: 768px) {
             .model-grid, .settings-grid {
                 grid-template-columns: 1fr;
@@ -354,7 +313,6 @@
                 flex-direction: column;
             }
         }
-
         .floating-elements {
             position: fixed;
             top: 20px;
@@ -364,7 +322,6 @@
             flex-direction: column;
             gap: 10px;
         }
-
         .floating-btn {
             padding: 10px 15px;
             background: rgba(0, 247, 255, 0.1);
@@ -380,14 +337,12 @@
             gap: 6px;
             backdrop-filter: blur(10px);
         }
-
         .floating-btn:hover {
             background: rgba(0, 247, 255, 0.3);
             transform: translateY(-2px);
             box-shadow: 0 0 15px rgba(0, 247, 255, 0.5);
             color: #ffffff;
         }
-
         .terminal-style {
             font-family: 'Courier New', monospace;
             background: rgba(0, 20, 30, 0.6);
@@ -398,14 +353,12 @@
             color: #00ff88;
             position: relative;
         }
-
         .terminal-style::before {
             content: '$';
             color: #00f7ff;
             margin-right: 8px;
             font-weight: bold;
         }
-
         @media (max-width: 768px) {
             .chat-container {
                 height: 50vh !important;
@@ -419,7 +372,6 @@
                 right: 20px;
             }
         }
-
         .error-message {
             background: rgba(239, 68, 68, 0.2);
             border: 1px solid rgba(239, 68, 68, 0.5);
@@ -429,7 +381,6 @@
             margin: 16px 0;
             animation: fadeInUp 0.5s ease-out;
         }
-
         .retry-btn {
             background: linear-gradient(135deg, #ef4444, #dc2626);
             color: white;
@@ -440,12 +391,10 @@
             margin-top: 8px;
             transition: all 0.3s ease;
         }
-
         .retry-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
         }
-
         .code-block {
             background: #0a0a0f;
             border: 1px solid #3b82f6;
@@ -453,7 +402,6 @@
             margin: 16px 0;
             overflow: hidden;
         }
-
         .code-header {
             display: flex;
             justify-content: space-between;
@@ -462,13 +410,11 @@
             padding: 8px 12px;
             border-bottom: 1px solid #3b82f6;
         }
-
         .code-language {
             font-size: 0.8rem;
             color: #ff2a6d;
             font-weight: bold;
         }
-
         .copy-code-btn {
             background: none;
             border: none;
@@ -479,12 +425,10 @@
             border-radius: 4px;
             transition: all 0.3s ease;
         }
-
         .copy-code-btn:hover {
             background: rgba(59, 130, 246, 0.2);
             color: #3b82f6;
         }
-
         .code-block pre {
             margin: 0;
             padding: 16px;
@@ -494,12 +438,10 @@
             line-height: 1.4;
             color: #a8ff78;
         }
-
         .code-block code {
             display: block;
             white-space: pre;
         }
-
         .inline-code {
             background: rgba(255, 42, 109, 0.2);
             color: #ff2a6d;
@@ -508,12 +450,10 @@
             font-family: 'Courier New', monospace;
             font-size: 0.9rem;
         }
-
         #user-input::placeholder {
             color: #00c8ff !important;
             opacity: 0.8;
         }
-
         #user-input:focus {
             border-color: #00f7ff !important;
             box-shadow: 0 0 15px rgba(0, 247, 255, 0.6) !important;
@@ -523,16 +463,68 @@
 </head>
 <body class="bg-futuristic-bg text-futuristic-cyan min-h-screen p-4">
     <div class="scanline"></div>
-    
-    <div class="floating-elements">
-        <button id="toggleDarkMode" class="floating-btn">
-            🌙 Modo Oscuro
-        </button>
-        <button id="showInfo" class="floating-btn">
-            ℹ️ Información
-        </button>
+    <!-- Botón Hamburguesa -->
+    <button id="menuToggle" class="fixed top-4 left-4 z-50 bg-futuristic-input border border-futuristic-border text-futuristic-cyan p-3 rounded-full hover:bg-futuristic-border hover:text-black transition-all duration-300 shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+    <!-- Menú Lateral -->
+    <div id="sidebarMenu" class="fixed top-0 left-0 h-full w-80 bg-futuristic-panel border-r border-futuristic-border transform -translate-x-full transition-transform duration-300 ease-in-out z-40 shadow-xl overflow-y-auto">
+        <div class="p-6">
+            <h2 class="text-xl font-bold text-futuristic-cyan mb-6 flex items-center gap-2">
+                🤖 Menú Principal
+            </h2>
+            <div class="mb-6">
+                <h3 class="text-futuristic-purple mb-3">Selecciona un Modelo</h3>
+                <div class="grid grid-cols-1 gap-2">
+                    <button class="model-btn active" data-model="TinyLlama-1.1B-Chat-v1.0-q4f32_1-MLC">TinyLlama (Rápido)</button>
+                    <button class="model-btn" data-model="Llama-3-8B-Instruct-q4f16_1-MLC" disabled>Llama 3 8B (Potente)</button>
+                    <button class="model-btn" data-model="RedPajama-INCITE-Chat-3B-v1-q4f32_1-MLC-1k" disabled>RedPajama-INCITE (Balanceado)</button>
+                    <button class="model-btn" data-model="Qwen2-7B-Instruct-q4f32_1-MLC" disabled>Qwen 7B (matemático)</button>
+                    <button class="model-btn" data-model="Qwen2-0.5B-Instruct-q0f32-MLC">Qwen2-0.5B-Instruct</button>
+                    <button class="model-btn" data-model="Phi-3-mini-4k-instruct-q4f16_1-MLC-1k">Phi-3-mini</button>
+                    <button class="model-btn" data-model="gemma-2b-it-q4f32_1-MLC">gemma 2B</button>
+                </div>
+                <!-- Solo texto de estado, sin barra de carga -->
+                <div class="status-bar mt-3">
+                    <div id="status-text">Selecciona un modelo para comenzar</div>
+                </div>
+            </div>
+            <div class="mb-6">
+                <h3 class="text-futuristic-pink mb-3">Configuración Avanzada</h3>
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="setting-item flex items-center justify-between">
+                        <label class="flex items-center gap-1"><span class="text-sm">🌡️</span> Temperatura</label>
+                        <div class="flex items-center gap-2">
+                            <input type="range" id="temperature" min="0.1" max="1.0" step="0.1" value="0.7" class="w-20">
+                            <span id="temp-value" class="text-xs text-futuristic-cyan">0.7</span>
+                        </div>
+                    </div>
+                    <div class="setting-item flex items-center justify-between">
+                        <label class="flex items-center gap-1"><span class="text-sm">📏</span> Máx. Tokens</label>
+                        <input type="number" id="max-tokens" min="50" max="1000" value="512" class="w-20 text-futuristic-cyan text-xs">
+                    </div>
+                    <div class="setting-item flex items-center justify-between">
+                        <label class="flex items-center gap-1"><span class="text-sm">🎯</span> Top P</label>
+                        <div class="flex items-center gap-2">
+                            <input type="range" id="top-p" min="0.1" max="1.0" step="0.1" value="0.9" class="w-20">
+                            <span id="top-p-value" class="text-xs text-futuristic-cyan">0.9</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <button id="exportChat" class="w-full flex items-center gap-2 p-3 bg-futuristic-input border border-futuristic-border rounded-lg text-futuristic-cyan hover:bg-futuristic-border hover:text-black transition-all duration-300">
+                    💾 Exportar Chat
+                </button>
+                <button id="clearChat" class="w-full flex items-center gap-2 p-3 bg-futuristic-input border border-futuristic-border rounded-lg text-futuristic-cyan hover:bg-futuristic-border hover:text-black transition-all duration-300">
+                    🗑️ Limpiar Chat
+                </button>
+            </div>
+        </div>
     </div>
-
+    <!-- Contenido Principal -->
     <div class="max-w-6xl mx-auto">
         <div class="text-center mb-8 animate-fadeInUp">
             <img src="https://devicegridtest.org/icons/logo1.png" alt="Logo DeviceGrid" class="w-20 h-20 mx-auto rounded-full border-4 border-cyan-400 mb-4 shadow-[0_0_40px_#00ffff] pulse-neon" />
@@ -541,48 +533,6 @@
             </h1>
             <p class="mt-2 text-futuristic-border">100% privado • Sin internet • Ejecutado en tu navegador • Tecnología MLC LLM</p>
         </div>
-
-        <div class="model-selector">
-            <h3 class="text-futuristic-purple">Selecciona un Modelo</h3>
-            <div class="model-grid">
-                <button class="model-btn active" data-model="TinyLlama-1.1B-Chat-v1.0-q4f32_1-MLC">TinyLlama (Rápido)</button>
-                <button class="model-btn" data-model="Llama-3-8B-Instruct-q4f16_1-MLC">Llama 3 8B (Potente)</button>
-                <button class="model-btn" data-model="RedPajama-INCITE-Chat-3B-v1-q4f32_1-MLC-1k">RedPajama-INCITE (Balanceado)</button>
-                <button class="model-btn" data-model="Qwen2-7B-Instruct-q4f32_1-MLC">Qwen 7B (matematico)</button>
-                <button class="model-btn" data-model="Qwen2-0.5B-Instruct-q0f32-MLC">Qwen2-0.5B-Instruct</button>
-                <button class="model-btn" data-model="Phi-3-mini-4k-instruct-q4f16_1-MLC-1k">Phi-3-mini</button>
-                <button class="model-btn" data-model="gemma-2b-it-q4f32_1-MLC">gemma 2B </button>
-            </div>
-            <div class="status-bar">
-                <div id="status-text">Selecciona un modelo para comenzar</div>
-                <div id="loading-bar" class="loading-bar mt-2 hidden"></div>
-            </div>
-        </div>
-
-        <div class="settings-panel">
-            <h3 class="text-futuristic-pink">Configuración Avanzada</h3>
-            <div class="settings-grid">
-                <div class="setting-item">
-                    <label>🌡️ Temperatura</label>
-                    <input type="range" id="temperature" min="0.1" max="1.0" step="0.1" value="0.7" class="text-futuristic-cyan">
-                    <span id="temp-value" class="text-futuristic-cyan">0.7</span>
-                </div>
-                <div class="setting-item">
-                    <label>📏 Máx. Tokens</label>
-                    <input type="number" id="max-tokens" min="50" max="2500" value="1312" class="text-futuristic-cyan">
-                </div>
-                <div class="setting-item">
-                    <label>🎯 Top P</label>
-                    <input type="range" id="top-p" min="0.1" max="1.0" step="0.1" value="0.9" class="text-futuristic-cyan">
-                    <span id="top-p-value" class="text-futuristic-cyan">0.9</span>
-                </div>
-            </div>
-            <div class="action-buttons">
-                <button id="exportChat" class="action-btn export">💾 Exportar Chat</button>
-                <button id="clearChat" class="action-btn clear">🗑️ Limpiar Chat</button>
-            </div>
-        </div>
-
         <div class="bg-futuristic-panel rounded-2xl border border-futuristic-border p-6 h-[60vh] flex flex-col">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold text-futuristic-cyan">💬 Conversación</h2>
@@ -596,25 +546,20 @@
                     <div class="avatar">🤖</div>
                     <div class="message-content">
                         ¡Hola! 👋 Soy tu asistente IA local. Selecciona un modelo arriba y hazme cualquier pregunta.
-                        <div class="terminal-style mt-3">
-                            Usa /help para ver comandos especiales
-                        </div>
                     </div>
                 </div>
             </div>
             <div class="mt-4">
                 <form id="chat-form" class="flex gap-2">
-                    <input type="text" id="user-input" placeholder="Escribe tu mensaje aquí... (Usa / para comandos)" class="flex-grow bg-futuristic-input border border-futuristic-border text-futuristic-cyan px-4 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-futuristic-cyan" autocomplete="off" />
+                    <input type="text" id="user-input" placeholder="Escribe tu mensaje aquí..." class="flex-grow bg-futuristic-input border border-futuristic-border text-futuristic-cyan px-4 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-futuristic-cyan" autocomplete="off" />
                     <button type="submit" id="send-button" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-full transition-all duration-300">
                         🚀 Enviar
                     </button>
                 </form>
-                <div class="text-xs text-futuristic-border mt-2">
-                    Comandos: /help, /clear, /stats, /reset
-                </div>
+                <!-- Barra de carga del modelo aquí -->
+                <div id="loading-bar" class="loading-bar mt-3 hidden"></div>
             </div>
         </div>
-
         <div id="infoModal" class="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4 hidden">
             <div class="bg-futuristic-panel rounded-2xl border border-futuristic-border p-6 max-w-2xl w-full">
                 <div class="flex justify-between items-center mb-4">
@@ -628,38 +573,37 @@
                     <p>Este chatbot se ejecuta completamente en tu navegador usando WebGPU. No se envían tus datos a ningún servidor.</p>
                     <div class="terminal-style">
                         <strong>Modelos disponibles:</strong>
-                        <br>- TinyLlama: Rápido y ligero
-                        <br>- Llama 3 8B: Potente y preciso
-                        <br>- Phi-2: Balanceado y eficiente
-                        <br>- RedPajama 3B: Buen rendimiento general
-                        <br>- Mistral 7B: Alta calidad de respuestas
-                        <br>- Gemma 2B: Google, rápido y eficiente
-                        <br>- qwen2.5-math-1.5B
-                    </div>
-                    <div class="terminal-style">
-                        <strong>Comandos especiales:</strong>
-                        <br>/help - Mostrar ayuda
-                        <br>/clear - Limpiar chat
-                        <br>/stats - Mostrar estadísticas
-                        <br>/reset - Reiniciar conversación
+                        <br>- TinyLlama: Rápido y ligero ✅
+                        <br>- Phi-3-mini: Balanceado y eficiente ✅
+                        <br>- Gemma 2B: Google, rápido y eficiente ✅
+                        <br>- Qwen2-0.5B: Muy ligero ✅
+                        <br><span class="text-red-400">- Modelos grandes (7B/8B) no disponibles en iOS por falta de WebGPU.</span>
                     </div>
                     <p class="text-sm text-futuristic-border">Desarrollado con ❤️ para la comunidad de DeviceGridTest.org</p>
                 </div>
             </div>
         </div>
-
         <div class="text-center mt-6 text-sm text-futuristic-border">
             &copy; 2025 <span class="text-futuristic-cyan font-bold">devicegridtest.org</span> | Tecnología MLC LLM | 100% Local y Privado
         </div>
     </div>
-    
     <div id="installBanner" class="fixed bottom-4 left-4 right-4 bg-futuristic-purple/20 border border-futuristic-purple text-futuristic-cyan p-3 rounded-lg text-center z-50 hidden">
         💡 ¿Quieres usar esta app sin internet? ¡Instálala como aplicación!
         <button id="installBtn" class="ml-2 bg-futuristic-pink text-white px-3 py-1 rounded">➕ Instalar</button>
     </div>
-
     <script type="module">
         import { CreateWebWorkerMLCEngine } from "https://esm.run/@mlc-ai/web-llm@0.2.46";
+
+        // === Detección de WebGPU ===
+        async function isWebGPUSupported() {
+            if (!('gpu' in navigator)) return false;
+            try {
+                const adapter = await navigator.gpu.requestAdapter();
+                return adapter !== null;
+            } catch (e) {
+                return false;
+            }
+        }
 
         const chatContainer = document.getElementById('chat-container');
         const userInput = document.getElementById('user-input');
@@ -668,17 +612,17 @@
         const clearChat = document.getElementById('clearChat');
         const exportChat = document.getElementById('exportChat');
         const statusText = document.getElementById('status-text');
-        const loadingBar = document.getElementById('loading-bar');
+        const loadingBar = document.getElementById('loading-bar'); // ← ahora está en el chat
         const modelButtons = document.querySelectorAll('.model-btn');
         const tokenCount = document.getElementById('token-count');
         const responseTime = document.getElementById('response-time');
         const infoModal = document.getElementById('infoModal');
         const closeInfoModal = document.getElementById('closeInfoModal');
-        const showInfo = document.getElementById('showInfo');
-        const toggleDarkMode = document.getElementById('toggleDarkMode');
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebarMenu = document.getElementById('sidebarMenu');
 
         let engine = null;
-        let currentModel = 'TinyLlama-1.1B-Chat-v1.0-q4f32_1-MLC'; // ✅ Alineado con primer botón
+        let currentModel = 'TinyLlama-1.1B-Chat-v1.0-q4f32_1-MLC';
         let messages = [];
         let isGenerating = false;
 
@@ -691,15 +635,27 @@
         temperature.addEventListener('input', () => {
             tempValue.textContent = temperature.value;
         });
-
         topP.addEventListener('input', () => {
             topPValue.textContent = topP.value;
         });
 
-        loadModel(currentModel);
+        // === Habilitar/deshabilitar modelos según WebGPU ===
+        isWebGPUSupported().then(supported => {
+            if (!supported) {
+                statusText.textContent = "⚠️ WebGPU no disponible (iOS). Solo modelos pequeños.";
+                document.querySelectorAll('.model-btn').forEach(btn => {
+                    const model = btn.dataset.model;
+                    if (model.includes('8B') || model.includes('7B') || model.includes('3B')) {
+                        btn.disabled = true;
+                    }
+                });
+            }
+            loadModel(currentModel);
+        });
 
         modelButtons.forEach(btn => {
             btn.addEventListener('click', () => {
+                if (btn.disabled) return;
                 modelButtons.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 const model = btn.dataset.model;
@@ -707,15 +663,26 @@
             });
         });
 
+        menuToggle.addEventListener('click', () => {
+            sidebarMenu.classList.toggle('-translate-x-full');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!sidebarMenu.contains(e.target) && !menuToggle.contains(e.target) && !sidebarMenu.classList.contains('-translate-x-full')) {
+                sidebarMenu.classList.add('-translate-x-full');
+            }
+        });
+
         async function loadModel(modelName) {
             currentModel = modelName;
             statusText.textContent = `Cargando modelo: ${modelName}...`;
-            loadingBar.classList.remove('hidden');
+            loadingBar.classList.remove('hidden'); // ← se muestra abajo del input
             isGenerating = true;
             sendButton.disabled = true;
-            
+
             try {
                 if (engine) {
+                    await engine.unload();
                     engine = null;
                 }
 
@@ -726,57 +693,48 @@
                         initProgressCallback: (info) => {
                             statusText.textContent = info.text;
                             if (info.progress === 1) {
-                                statusText.textContent = `✅ Modelo ${modelName} cargado y listo para chatear!`;
+                                statusText.textContent = `✅ Modelo ${modelName} listo para chatear!`;
                                 loadingBar.classList.add('hidden');
                                 isGenerating = false;
                                 sendButton.disabled = false;
                                 clearChatMessages();
-                                addMessage("¡Modelo cargado! Hazme cualquier pregunta. Usa /help para ver comandos.", 'bot');
+                                addMessage("¡Modelo cargado! Hazme cualquier pregunta.", 'bot');
                             }
-                        }
+                        },
+                        contextWindowSize: 512
                     }
                 );
-
                 messages = [];
-
             } catch (error) {
                 console.error('Error al cargar el modelo:', error);
-                
                 const errorMessage = document.createElement('div');
                 errorMessage.className = 'error-message';
                 errorMessage.innerHTML = `
                     <strong>❌ Error al cargar el modelo ${modelName}</strong>
-                    <p>${error.message}</p>
-                    <p><strong>⚠️ MODELO NO DISPONIBLE:</strong> Este modelo puede no existir en el CDN de MLC LLM.</p>
+                    <p>${error.message || 'Desconocido'}</p>
+                    <p><strong>💡 Consejo:</strong> En iOS, usa solo modelos pequeños (TinyLlama, Phi-3, Gemma).</p>
                     <button id="retryBtn" class="retry-btn mt-4">🔄 Reintentar</button>
                 `;
-                
                 chatContainer.innerHTML = '';
                 chatContainer.appendChild(errorMessage);
-                
-                document.getElementById('retryBtn').addEventListener('click', () => {
-                    loadModel(modelName);
-                });
-                
-                statusText.textContent = `❌ Error al cargar ${modelName}: ${error.message}`;
+                document.getElementById('retryBtn').addEventListener('click', () => loadModel(modelName));
+                statusText.textContent = `❌ Error: ${error.message || 'No se pudo cargar'}`;
                 loadingBar.classList.add('hidden');
                 isGenerating = false;
                 sendButton.disabled = false;
             }
         }
 
+        // === Funciones de chat (sin comandos) ===
         function addMessage(text, sender) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}`;
-            
             const avatarDiv = document.createElement('div');
             avatarDiv.className = 'avatar';
             avatarDiv.textContent = sender === 'bot' ? '🤖' : '👤';
-            
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
             contentDiv.innerHTML = formatMessage(text);
-            
             if (sender === 'user') {
                 messageDiv.appendChild(contentDiv);
                 messageDiv.appendChild(avatarDiv);
@@ -784,18 +742,12 @@
                 messageDiv.appendChild(avatarDiv);
                 messageDiv.appendChild(contentDiv);
             }
-            
             chatContainer.appendChild(messageDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
-            
             return contentDiv;
         }
 
         function formatMessage(text) {
-            if (text.startsWith('/')) {
-                return `<span style="color: #a855f7; font-weight: bold;">${text}</span>`;
-            }
-            
             if (text.includes('```')) {
                 const parts = text.split('```');
                 let result = '';
@@ -804,7 +756,6 @@
                         const codeContent = parts[i].trim();
                         let language = '';
                         let code = codeContent;
-                        
                         if (codeContent.includes('\n')) {
                             const firstLineEnd = codeContent.indexOf('\n');
                             const firstLine = codeContent.substring(0, firstLineEnd).trim();
@@ -813,7 +764,6 @@
                                 code = codeContent.substring(firstLineEnd + 1);
                             }
                         }
-                        
                         result += `
                             <div class="code-block">
                                 <div class="code-header">
@@ -829,7 +779,6 @@
                 }
                 return result;
             }
-            
             return text.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>');
         }
 
@@ -839,22 +788,17 @@
             return div.innerHTML;
         }
 
-        // ✅ Delegación de eventos para copyCode
         chatContainer.addEventListener('click', (e) => {
             if (e.target.classList.contains('copy-code-btn')) {
                 const button = e.target;
                 const codeBlock = button.closest('.code-block').querySelector('code');
                 navigator.clipboard.writeText(codeBlock.textContent).then(() => {
                     button.textContent = '✅ Copiado!';
-                    setTimeout(() => {
-                        button.textContent = '📋 Copiar';
-                    }, 2000);
+                    setTimeout(() => button.textContent = '📋 Copiar', 2000);
                 }).catch(err => {
                     console.error('Error al copiar:', err);
                     button.textContent = '❌ Error';
-                    setTimeout(() => {
-                        button.textContent = '📋 Copiar';
-                    }, 2000);
+                    setTimeout(() => button.textContent = '📋 Copiar', 2000);
                 });
             }
         });
@@ -876,7 +820,6 @@
                 const text = el.querySelector('.message-content').textContent;
                 return `${sender}: ${text}`;
             }).join('\n\n');
-            
             const blob = new Blob([chatContent], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -890,68 +833,52 @@
 
         chatForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (isGenerating) return;
-            
+            if (isGenerating || !engine) return;
             const text = userInput.value.trim();
-            if (!text || !engine) return;
+            if (!text) return;
 
-            if (text.startsWith('/')) {
-                processCommand(text);
-                userInput.value = '';
-                return;
-            }
+            // ❌ Ya no hay procesamiento de comandos
 
             addMessage(text, 'user');
             userInput.value = '';
             sendButton.disabled = true;
             isGenerating = true;
-
             messages.push({ role: 'user', content: text });
             updateTokenCount();
 
             const startTime = Date.now();
-
             try {
                 const config = {
                     temperature: parseFloat(temperature.value),
                     max_gen_len: parseInt(maxTokens.value),
                     top_p: parseFloat(topP.value)
                 };
-
                 const chunks = await engine.chat.completions.create({
                     messages: [...messages],
                     stream: true,
                     ...config
                 });
-
                 let reply = "";
                 const botMessage = addMessage("", 'bot');
-
                 for await (const chunk of chunks) {
                     const content = chunk.choices[0]?.delta?.content ?? "";
                     reply += content;
                     botMessage.innerHTML = formatMessage(reply);
                 }
-
                 messages.push({ role: 'assistant', content: reply });
                 updateTokenCount();
-                
                 const endTime = Date.now();
                 responseTime.textContent = `${((endTime - startTime) / 1000).toFixed(2)}s`;
-
             } catch (error) {
                 console.error('Error al generar respuesta:', error);
-                
                 const errorMessage = document.createElement('div');
                 errorMessage.className = 'error-message';
                 errorMessage.innerHTML = `
                     <strong>❌ Error al generar respuesta</strong>
-                    <p>${error.message}</p>
+                    <p>${error.message || 'Falló la inferencia'}</p>
                     <button id="retryGenerateBtn" class="retry-btn mt-4">🔄 Reintentar</button>
                 `;
-                
                 chatContainer.appendChild(errorMessage);
-                
                 document.getElementById('retryGenerateBtn').addEventListener('click', () => {
                     messages.pop();
                     chatContainer.removeChild(errorMessage);
@@ -964,25 +891,6 @@
             }
         });
 
-        function processCommand(command) {
-            switch(command.toLowerCase()) {
-                case '/help':
-                    addMessage("Comandos disponibles:\n/help - Mostrar esta ayuda\n/clear - Limpiar chat\n/stats - Mostrar estadísticas\n/reset - Reiniciar conversación", 'bot');
-                    break;
-                case '/clear':
-                case '/reset':
-                    clearChatMessages();
-                    addMessage("¡Historial limpiado! ¿En qué puedo ayudarte?", 'bot');
-                    break;
-                case '/stats':
-                    const stats = `Estadísticas:\n- Mensajes: ${messages.length}\n- Tokens: ${Math.floor(messages.reduce((acc, msg) => acc + (msg.content?.length || 0), 0) / 4)}\n- Modelo: ${currentModel}`;
-                    addMessage(stats, 'bot');
-                    break;
-                default:
-                    addMessage("Comando no reconocido. Usa /help para ver los comandos disponibles.", 'bot');
-            }
-        }
-
         clearChat.addEventListener('click', () => {
             if (confirm('¿Estás seguro de que quieres limpiar el historial de chat?')) {
                 clearChatMessages();
@@ -990,16 +898,8 @@
             }
         });
 
-        showInfo.addEventListener('click', () => {
-            infoModal.classList.remove('hidden');
-        });
-
         closeInfoModal.addEventListener('click', () => {
             infoModal.classList.add('hidden');
-        });
-
-        toggleDarkMode.addEventListener('click', () => {
-            toggleDarkMode.textContent = toggleDarkMode.textContent.includes('Oscuro') ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
         });
 
         setTimeout(() => {
