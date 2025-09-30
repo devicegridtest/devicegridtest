@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageDiv = document.getElementById('message');
 
     // ✅ Usa tu dominio real (¡NO rutas relativas en Netlify!)
-    const API_BASE = 'https://devicegridtest.org/api';
+    const API_BASE = 'https://nexa-faucet-backend-5nxc.onrender.com';
 
     // =============== BALANCE ===============
     async function updateBalance() {
