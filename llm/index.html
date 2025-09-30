@@ -53,7 +53,7 @@
         }
     </script>
     <style>
-        /* ... (todos tus estilos se mantienen igual) ... */
+        /* === Tus estilos originales (sin cambios) === */
         body {
             background: #0a0a0f;
             color: #00f7ff;
@@ -479,9 +479,9 @@
                 <h3 class="text-futuristic-purple mb-3">Selecciona un Modelo</h3>
                 <div class="grid grid-cols-1 gap-2">
                     <button class="model-btn active" data-model="TinyLlama-1.1B-Chat-v1.0-q4f32_1-MLC">TinyLlama (Rápido)</button>
-                    <button class="model-btn" data-model="Llama-3-8B-Instruct-q4f16_1-MLC" disabled>Llama 3 8B (Potente)</button>
-                    <button class="model-btn" data-model="RedPajama-INCITE-Chat-3B-v1-q4f32_1-MLC-1k" disabled>RedPajama-INCITE (Balanceado)</button>
-                    <button class="model-btn" data-model="Qwen2-7B-Instruct-q4f32_1-MLC" disabled>Qwen 7B (matemático)</button>
+                    <button class="model-btn" data-model="Llama-3-8B-Instruct-q4f16_1-MLC">Llama 3 8B (Potente)</button>
+                    <button class="model-btn" data-model="RedPajama-INCITE-Chat-3B-v1-q4f32_1-MLC-1k">RedPajama-INCITE (Balanceado)</button>
+                    <button class="model-btn" data-model="Qwen2-7B-Instruct-q4f32_1-MLC">Qwen 7B (matemático)</button>
                     <button class="model-btn" data-model="Qwen2-0.5B-Instruct-q0f32-MLC">Qwen2-0.5B-Instruct</button>
                     <button class="model-btn" data-model="Phi-3-mini-4k-instruct-q4f16_1-MLC-1k">Phi-3-mini</button>
                     <button class="model-btn" data-model="gemma-2b-it-q4f32_1-MLC">gemma 2B</button>
@@ -503,7 +503,7 @@
                     </div>
                     <div class="setting-item flex items-center justify-between">
                         <label class="flex items-center gap-1"><span class="text-sm">📏</span> Máx. Tokens</label>
-                        <input type="number" id="max-tokens" min="50" max="1000" value="512" class="w-20 text-futuristic-cyan text-xs">
+                        <input type="number" id="max-tokens" min="50" max="2500" value="1312" class="w-20 text-futuristic-cyan text-xs">
                     </div>
                     <div class="setting-item flex items-center justify-between">
                         <label class="flex items-center gap-1"><span class="text-sm">🎯</span> Top P</label>
@@ -550,9 +550,10 @@
                 </div>
             </div>
             <div class="mt-4">
-                <form id="chat-form" class="flex gap-2">
+                <!-- Formulario adaptable -->
+                <form id="chat-form" class="flex flex-col sm:flex-row gap-2">
                     <input type="text" id="user-input" placeholder="Escribe tu mensaje aquí..." class="flex-grow bg-futuristic-input border border-futuristic-border text-futuristic-cyan px-4 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-futuristic-cyan" autocomplete="off" />
-                    <button type="submit" id="send-button" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-full transition-all duration-300">
+                    <button type="submit" id="send-button" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-full transition-all duration-300 w-full sm:w-auto">
                         🚀 Enviar
                     </button>
                 </form>
@@ -594,6 +595,13 @@
     <script type="module">
         import { CreateWebWorkerMLCEngine } from "https://esm.run/@mlc-ai/web-llm@0.2.46";
 
+        // === Detección de dispositivo móvil ===
+        function isMobile() {
+            return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        const isOnMobile = isMobile();
+
         // === Detección de WebGPU ===
         async function isWebGPUSupported() {
             if (!('gpu' in navigator)) return false;
@@ -605,6 +613,7 @@
             }
         }
 
+        // === Elementos del DOM ===
         const chatContainer = document.getElementById('chat-container');
         const userInput = document.getElementById('user-input');
         const sendButton = document.getElementById('send-button');
@@ -622,7 +631,9 @@
         const sidebarMenu = document.getElementById('sidebarMenu');
 
         let engine = null;
-        let currentModel = 'TinyLlama-1.1B-Chat-v1.0-q4f32_1-MLC';
+        let currentModel = isOnMobile 
+            ? 'TinyLlama-1.1B-Chat-v1.0-q4f32_1-MLC' 
+            : 'TinyLlama-1.1B-Chat-v1.0-q4f32_1-MLC';
         let messages = [];
         let isGenerating = false;
 
@@ -632,6 +643,12 @@
         const topP = document.getElementById('top-p');
         const topPValue = document.getElementById('top-p-value');
 
+        // Ajustar maxTokens en móviles
+        if (isOnMobile) {
+            maxTokens.value = 512;
+            maxTokens.max = 1000;
+        }
+
         temperature.addEventListener('input', () => {
             tempValue.textContent = temperature.value;
         });
@@ -639,14 +656,21 @@
             topPValue.textContent = topP.value;
         });
 
-        // === Habilitar/deshabilitar modelos según WebGPU ===
+        // === Habilitar/deshabilitar modelos según dispositivo ===
         isWebGPUSupported().then(supported => {
-            if (!supported) {
-                statusText.textContent = "⚠️ WebGPU no disponible (iOS). Solo modelos pequeños.";
-                document.querySelectorAll('.model-btn').forEach(btn => {
+            if (isOnMobile) {
+                statusText.textContent = "📱 Modo móvil: solo modelos ligeros disponibles.";
+                const allowedModels = [
+                    'TinyLlama-1.1B-Chat-v1.0-q4f32_1-MLC',
+                    'Phi-3-mini-4k-instruct-q4f16_1-MLC-1k',
+                    'gemma-2b-it-q4f32_1-MLC',
+                    'Qwen2-0.5B-Instruct-q0f32-MLC'
+                ];
+                modelButtons.forEach(btn => {
                     const model = btn.dataset.model;
-                    if (model.includes('8B') || model.includes('7B') || model.includes('3B')) {
+                    if (!allowedModels.includes(model)) {
                         btn.disabled = true;
+                        btn.title = "No disponible en móviles";
                     }
                 });
             }
@@ -676,7 +700,7 @@
         async function loadModel(modelName) {
             currentModel = modelName;
             statusText.textContent = `Cargando modelo: ${modelName}...`;
-            loadingBar.classList.remove('hidden'); // ← se muestra abajo del input
+            loadingBar.classList.remove('hidden');
             isGenerating = true;
             sendButton.disabled = true;
 
@@ -701,7 +725,7 @@
                                 addMessage("¡Modelo cargado! Hazme cualquier pregunta.", 'bot');
                             }
                         },
-                        contextWindowSize: 512
+                        contextWindowSize: isOnMobile ? 512 : 2048
                     }
                 );
                 messages = [];
