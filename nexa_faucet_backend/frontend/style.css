@@ -9,11 +9,12 @@
     --bg: #0f0f13;
     --card-bg: #1a1a22;
     --text: #e0e0ff;
-    --accent: #6e8efb;
+    --accent: #6e8efb; /* Azul neón */
     --accent-hover: #5a7df7;
     --error: #ff6b6b;
     --success: #51cf66;
     --border: #2a2a3a;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 body {
@@ -50,13 +51,11 @@ header {
 .logo {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--accent); /* Fallback */
     background: linear-gradient(90deg, var(--accent), #a777e3);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text; /* Estándar, por si acaso */
+    background-clip: text;
     display: inline-block;
-    position: relative;
 }
 
 .discord-btn {
@@ -80,17 +79,11 @@ header {
     height: 20px;
 }
 
-/* HERO */
+/* HERO SECTION */
 .hero {
     text-align: center;
     padding: 4rem 0 2rem;
-    background-color: #0f0f13; /* Fallback */
-    background-image: 
-        linear-gradient(rgba(15,15,19,0.5), rgba(15,15,19,0.9)), 
-        url('');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+    background: linear-gradient(rgba(15,15,19,0.5), rgba(15,15,19,0.9)), url('https://i.imgur.com/Jb7X9u8.png') center / cover no-repeat;
 }
 
 .hero h1 {
@@ -120,7 +113,7 @@ header {
     padding: 2.5rem;
     border-radius: 16px;
     border: 1px solid var(--border);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    box-shadow: var(--shadow);
     text-align: center;
 }
 
@@ -277,6 +270,7 @@ footer p {
     }
 }
 
+/* BALANCE BANNER */
 .balance-banner {
     background: rgba(81, 207, 102, 0.1);
     border: 1px solid rgba(81, 207, 102, 0.3);
@@ -293,11 +287,6 @@ footer p {
     padding: 4rem 0;
     background: linear-gradient(135deg, rgba(110, 142, 251, 0.1), rgba(167, 119, 227, 0.1));
     text-align: center;
-}
-
-.donation-section h2 {
-    color: var(--accent);
-    margin-bottom: 1rem;
 }
 
 .donation-card {
@@ -349,4 +338,152 @@ footer p {
     color: #aaa;
     font-size: 0.9rem;
     margin-top: 1rem;
+}
+
+/* =================== PANEL DE ADMINISTRACIÓN =================== */
+
+.admin-panel {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    padding: 15px;
+    color: var(--text);
+    animation: fadeInUp 0.4s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.admin-header h3 {
+    margin: 0;
+    color: var(--accent);
+    font-size: 1.3rem;
+}
+
+.admin-header button {
+    background: transparent;
+    border: none;
+    color: #ff6b6b;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+}
+
+.admin-content p,
+.admin-content h4 {
+    margin: 8px 0;
+}
+
+.admin-content code {
+    background: rgba(255,255,255,0.05);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.btn {
+    padding: 8px 12px;
+    margin: 8px 4px 0 0;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-success {
+    background: #51cf66;
+    color: white;
+}
+
+.btn-warning {
+    background: #ffa726;
+    color: black;
+}
+
+.admin-password {
+    margin-top: 15px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.admin-password input {
+    flex: 1;
+    padding: 8px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+}
+
+.admin-password button {
+    padding: 8px 12px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* BOTÓN FLotante ADMIN */
+.admin-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: #6e8efb;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    cursor: pointer;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 2s infinite;
+    user-select: none;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Responsive: Evita colisión en móvil */
+@media (max-width: 768px) {
+    .admin-panel {
+        width: 90vw;
+        right: 5%;
+        bottom: 70px;
+    }
+    .admin-btn {
+        bottom: 70px;
+    }
 }
