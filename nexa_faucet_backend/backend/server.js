@@ -9,15 +9,15 @@ const bech32 = require('bech32');
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// ✅ CORS: Sin espacios, con orden correcto
+// ✅ CORS: Sin espacios ni URLs mal formadas
 app.use(cors({
     origin: [
         'null',
         'http://localhost:3000',
         'http://127.0.0.1:5500',
         'http://127.0.0.1:8080',
-        'https://tudominio.com',       // ✅ Sin espacios
-        'https://devicegridtest.org'    // ✅ Sin espacios
+        'https://tudominio.com',           // ✅ sin espacios
+        'https://devicegridtest.org'       // ✅ sin espacios
     ],
     credentials: true,
     optionsSuccessStatus: 200
@@ -51,7 +51,7 @@ app.get('/health', (req, res) => {
     res.json({ status: 'OK', message: 'Faucet Backend Activo' });
 });
 
-// ✅ VALIDACIÓN DE DIRECCIÓN NEXA
+// ✅ Validación de dirección Nexa
 function isValidNexaAddress(address) {
     if (!address || typeof address !== 'string') return false;
     const prefix = 'nexa:';
@@ -60,7 +60,7 @@ function isValidNexaAddress(address) {
     const bech32Data = address.slice(prefix.length);
     try {
         const { data } = bech32.decode(bech32Data, 702);
-        return data.length === 20; // 20 bytes = P2WPKH (Nexa)
+        return data.length === 20; // P2WPKH
     } catch {
         return false;
     }
@@ -95,7 +95,6 @@ app.post('/faucet', async (req, res) => {
             });
         }
 
-        // ✅ ¡ENVIAR TRANSACCIÓN REAL!
         let txid;
         try {
             txid = await sendFaucet(address, amount);
@@ -116,7 +115,7 @@ app.post('/faucet', async (req, res) => {
                                 fields: [
                                     { name: "Dirección", value: `\`${address}\``, inline: true },
                                     { name: "Monto", value: `${amount / 100000000} NEXA`, inline: true },
-                                    { name: "TXID", value: `[Ver en explorer](https://explorer.nexa.org/tx/${txid})`, inline: false }
+                                    { name: "TXID", value: `[Ver en explorer](https://explorer.nexa.org/tx/${txid})`, inline: false } // ✅ SIN ESPACIOS
                                 ],
                                 timestamp: new Date().toISOString(),
                                 footer: { text: "Nexa Faucet" }
@@ -232,11 +231,17 @@ app.use('*', (req, res) => {
 // ✅ Iniciar servidor
 try {
     app.listen(PORT, '0.0.0.0', () => {
-        console.log(`🚀 Faucet Backend corriendo en puerto ${PORT}`);
-        console.log(`💡 Usa POST /faucet para solicitar fondos`);
-        console.log(`📊 Saldo: GET /balance`);
-        console.log(`📡 Transacciones: GET /transactions`);
-        console.log(`🔑 Dirección de la faucet: ${getWallet().address}`);
+        try {
+            const wallet = getWallet(); // ✅ Solo intentamos si todo está listo
+            console.log(`🚀 Faucet Backend corriendo en puerto ${PORT}`);
+            console.log(`💡 Usa POST /faucet para solicitar fondos`);
+            console.log(`📊 Saldo: GET /balance`);
+            console.log(`📡 Transacciones: GET /transactions`);
+            console.log(`🔑 Dirección de la faucet: ${wallet.address}`);
+        } catch (walletError) {
+            console.error('❌ No se pudo cargar la billetera:', walletError.message);
+            console.error('📝 Revisa tu MNEMONIC o ejecuta test-wallet.js');
+        }
     });
 } catch (error) {
     console.error('❌ Error fatal al iniciar servidor:', error);
