@@ -3,24 +3,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const requestBtn = document.getElementById('requestBtn');
     const messageDiv = document.getElementById('message');
 
-    // ✅ CORREGIDO: Eliminados los espacios en blanco al final
+    // ✅ URL corregida — sin espacios ni errores
     const API_BASE = 'https://nexa-faucet.onrender.com';
+
+    // =============== FUNCIONES DE CARGA CON ANIMACIÓN ===============
+    
+    // Función para mostrar un spinner
+    function showLoader(element, text = 'Cargando...') {
+        element.innerHTML = `
+            <div class="loader"></div>
+            ${text}
+        `;
+    }
+
+    // Función para limpiar el loader
+    function clearLoader(element, html) {
+        if (element instanceof HTMLElement) {
+            element.innerHTML = html;
+        }
+    }
 
     // =============== BALANCE ===============
     async function updateBalance() {
+        const balanceElement = document.getElementById('balance');
+        if (!balanceElement) return;
+
         try {
+            showLoader(balanceElement); // 🌀 Mostrar animación
+
             const response = await fetch(`${API_BASE}/balance`);
             if (!response.ok) throw new Error('HTTP ' + response.status);
 
             const data = await response.json();
             if (data.success && data.balanceInNEXA !== undefined) {
-                document.getElementById('balance').textContent = data.balanceInNEXA;
+                clearLoader(balanceElement, `<strong>${data.balanceInNEXA}</strong> NEXA`);
             } else {
-                document.getElementById('balance').textContent = 'Error';
+                clearLoader(balanceElement, 'Error');
             }
         } catch (error) {
             console.error('Error actualizando saldo:', error);
-            document.getElementById('balance').textContent = 'Offline';
+            clearLoader(document.getElementById('balance'), 'Offline');
         }
     }
 
@@ -52,12 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (!isValidNexaAddress(address)) {
-            showMessage('⚠️ Dirección Nexa inválida. Debe empezar con "nexa:" y tener al menos 48 caracteres.', 'error');
+            showMessage('⚠️ Dirección Nexa inválida. Debe empezar con "nexa:"', 'error');
             return;
         }
 
         requestBtn.disabled = true;
-        requestBtn.textContent = 'Enviando...';
+        requestBtn.innerHTML = '<div class="loader small"></div> Enviando...';
 
         try {
             const response = await fetch(`${API_BASE}/faucet`, {
@@ -90,21 +112,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const donationElement = document.getElementById('donationAddress');
         if (!donationElement) return;
 
-        donationElement.textContent = 'Cargando...';
+        showLoader(donationElement, ''); // Solo spinner mientras carga
 
         try {
-            const response = await fetch(`${API_BASE}/balance`); // ✅ Usamos /balance, no /donation
+            const response = await fetch(`${API_BASE}/balance`);
             if (!response.ok) throw new Error('No se pudo conectar al servidor');
 
             const data = await response.json();
             if (data.success && data.address) {
-                donationElement.textContent = data.address;
+                clearLoader(donationElement, `<code>${data.address}</code>`);
             } else {
-                donationElement.textContent = 'No disponible';
+                clearLoader(donationElement, 'No disponible');
             }
         } catch (error) {
             console.error('Error cargando dirección de donación:', error);
-            donationElement.textContent = 'Carga fallida. Inténtalo más tarde.';
+            clearLoader(donationElement, 'Carga fallida. Inténtalo más tarde.');
         }
     }
 
@@ -118,14 +140,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const address = donationElement.textContent.trim();
-            if (!address || address.includes('Cargando') || address.includes('fallida')) {
+            const code = donationElement.querySelector('code') || donationElement;
+            const address = code?.textContent.trim() || '';
+
+            if (!address || address === 'No disponible') {
                 alert('La dirección aún no está disponible. Por favor, espera.');
                 return;
             }
 
             navigator.clipboard.writeText(address).then(() => {
-                copyBtn.textContent = '¡Copiado!';
+                copyBtn.textContent = '✅ Copiado!';
                 setTimeout(() => {
                     copyBtn.textContent = '📋 Copiar';
                 }, 2000);
@@ -138,15 +162,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // =============== LIVE TRANSACTIONS ===============
     async function loadTransactions() {
+        const grid = document.getElementById('transactionsGrid');
+        if (!grid) return;
+
+        // Muestra skeletons mientras carga
+        grid.innerHTML = `
+            <div class="skeleton-card"><div class="skeleton-line"></div><div class="skeleton-line"></div></div>
+            <div class="skeleton-card"><div class="skeleton-line"></div><div class="skeleton-line"></div></div>
+            <div class="skeleton-card"><div class="skeleton-line"></div><div class="skeleton-line"></div></div>
+        `;
+
         try {
             const response = await fetch(`${API_BASE}/transactions`);
             if (!response.ok) throw new Error('HTTP ' + response.status);
 
             const data = await response.json();
-            const grid = document.getElementById('transactionsGrid');
-            if (!grid) return;
+            const container = document.getElementById('transactionsGrid');
+            if (!container) return;
 
-            grid.innerHTML = '';
+            container.innerHTML = '';
 
             if (data.success && Array.isArray(data.transactions) && data.transactions.length > 0) {
                 data.transactions.forEach(tx => {
@@ -157,10 +191,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="address">${tx.shortAddress || 'N/A'}</div>
                         <div class="date">🕒 ${tx.date || 'N/A'}</div>
                     `;
-                    grid.appendChild(card);
+                    container.appendChild(card);
                 });
             } else {
-                grid.innerHTML = '<p style="text-align:center;color:#aaa">No hay transacciones recientes</p>';
+                container.innerHTML = '<p style="text-align:center;color:#aaa">No hay transacciones recientes</p>';
             }
         } catch (error) {
             console.error('Error cargando transacciones:', error);
@@ -170,6 +204,83 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+
+    // =============== PANEL DE ADMINISTRACIÓN ===============
+    const adminPanel = document.getElementById('adminPanel');
+    const openAdminBtn = document.getElementById('openAdminBtn');
+    const closeAdminBtn = document.getElementById('closeAdmin');
+    const loginAdminBtn = document.getElementById('loginAdmin');
+    const adminPasswordInput = document.getElementById('adminPassword');
+
+    // 🔐 CONTRASEÑA SEGURA (cámbiala)
+    const ADMIN_PASSWORD = 'NexaFaucet2025!';
+
+    openAdminBtn?.addEventListener('click', () => {
+        adminPanel.style.display = 'block';
+        adminPasswordInput.focus();
+    });
+
+    closeAdminBtn?.addEventListener('click', () => {
+        adminPanel.style.display = 'none';
+    });
+
+    loginAdminBtn?.addEventListener('click', async () => {
+        if (adminPasswordInput.value === ADMIN_PASSWORD) {
+            adminPanel.classList.add('authenticated');
+            adminPasswordInput.disabled = true;
+            loginAdminBtn.disabled = true;
+            adminPasswordInput.placeholder = "✅ Autenticado";
+            await loadAdminData();
+        } else {
+            alert('❌ Contraseña incorrecta');
+        }
+    });
+
+    async function loadAdminData() {
+        try {
+            const balanceRes = await fetch(`${API_BASE}/balance`);
+            const balanceData = await balanceRes.json();
+
+            if (balanceData.success) {
+                document.getElementById('adminAddress').textContent = balanceData.address;
+                document.getElementById('adminBalance').textContent = balanceData.balanceInNEXA;
+            }
+
+            const txRes = await fetch(`${API_BASE}/transactions`);
+            const txData = await txRes.json();
+            const adminTxDiv = document.getElementById('adminTransactions');
+            
+            if (txData.success && txData.transactions.length > 0) {
+                adminTxDiv.innerHTML = txData.transactions.map(tx => `
+                    <div style="padding: 8px; border-bottom: 1px solid #333; font-size: 0.9rem;">
+                        <strong>${tx.shortAddress}</strong><br>
+                        <small>${tx.date}</small>
+                    </div>
+                `).join('');
+            } else {
+                adminTxDiv.innerHTML = '<p>No hay transacciones</p>';
+            }
+        } catch (err) {
+            console.error('Error en admin:', err);
+        }
+    }
+
+    // Acción: Limpiar cooldowns
+    document.getElementById('clearCooldown')?.addEventListener('click', async () => {
+        if (!adminPanel.classList.contains('authenticated')) return;
+        if (!confirm('¿Limpiar todos los registros?')) return;
+
+        const res = await fetch(`${API_BASE}/clear-cooldown`, {
+            method: 'POST'
+        });
+        const data = await res.json();
+        if (data.success) {
+            alert('✅ Cooldowns limpiados');
+            loadAdminData();
+        } else {
+            alert('❌ Error: ' + data.error);
+        }
+    });
 
     // Inicializar
     loadDonationAddress();
