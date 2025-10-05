@@ -21,12 +21,33 @@ document.addEventListener('DOMContentLoaded', () => {
         messageDiv.className = 'message ' + type;
         messageDiv.style.display = 'block';
         setTimeout(() => messageDiv.style.display = 'none', 8000);
+
+        // ✅ Reproduce sonido según el tipo
+        if (type === 'success') {
+            playSuccessSound();
+        } else if (type === 'error') {
+            playErrorSound();
+        }
     }
 
     function isValidNexaAddress(address) {
         const regex = /^nexa:[a-z0-9]{48,}$/;
         return regex.test(address);
     }
+
+    // =============== FORMATO DE FECHA ===============
+    const formatDate = (timestamp) => {
+        if (!timestamp) return 'N/A';
+        const date = new Date(timestamp);
+        return date.toLocaleString('es-ES', { 
+            day: '2-digit', 
+            month: '2-digit', 
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+    };
 
     // =============== BALANCE ===============
     async function updateBalance() {
@@ -130,10 +151,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 data.transactions.forEach(tx => {
                     const card = document.createElement('div');
                     card.className = 'transaction-card';
+                    // ✅ Fecha corregida
                     card.innerHTML = `
                         <h3>🔑 Dirección</h3>
                         <div class="address">${tx.shortAddress || 'N/A'}</div>
-                        <div class="date">🕒 ${tx.date || 'N/A'}</div>
+                        <div class="date">🕒 ${formatDate(tx.date) || 'N/A'}</div>
                     `;
                     container.appendChild(card);
                 });
@@ -190,10 +212,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const txData = await txRes.json();
             const adminTxDiv = document.getElementById('adminTransactions');
             if (txData.success && txData.transactions?.length) {
+                // ✅ Fecha corregida en admin
                 adminTxDiv.innerHTML = txData.transactions.map(tx => `
                     <div style="padding:8px;border-bottom:1px solid #333;font-size:0.9rem">
                         <strong>${tx.shortAddress}</strong><br>
-                        <small>${tx.date}</small>
+                        <small>${formatDate(tx.date)}</small>
                     </div>
                 `).join('');
             } else {
@@ -212,6 +235,20 @@ document.addEventListener('DOMContentLoaded', () => {
         alert(data.success ? '✅ Cooldowns limpiados' : '❌ Error: ' + data.error);
         if (data.success) loadAdminData();
     });
+
+    // ====== SONIDOS ======
+    const successSound = new Audio('zapsplat_foley_money_coin_throw_down_onto_table_and_very_short_spin_112888.mp3');
+    const errorSound = new Audio('zapsplat_multimedia_game_sound_low_frequency_blip_error_112553.mp3');
+
+    function playSuccessSound() {
+        successSound.currentTime = 0;
+        successSound.play().catch(e => console.log("Sonido bloqueado por el navegador"));
+    }
+
+    function playErrorSound() {
+        errorSound.currentTime = 0;
+        errorSound.play().catch(e => console.log("Sonido bloqueado por el navegador"));
+    }
 
     // Inicializar
     loadDonationAddress();
