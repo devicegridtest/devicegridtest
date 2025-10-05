@@ -8,6 +8,7 @@ const getWallet = async () => {
     if (!walletInstance) {
         const mnemonic = process.env.MNEMONIC;
         if (!mnemonic) throw new Error('MNEMONIC no definido');
+        
         await rostrumProvider.connect('mainnet');
         walletInstance = new Wallet(mnemonic, 'mainnet');
         await walletInstance.initialize();
@@ -18,6 +19,9 @@ const getWallet = async () => {
 const getBalance = async () => {
     const wallet = await getWallet();
     const account = wallet.accountStore.getAccount('1.0');
+    if (!account) throw new Error('Cuenta 1.0 no disponible');
+
+    await account.sync(); // Sincroniza para obtener saldo actualizado
     const raw = account.balance.confirmed;
 
     if (typeof raw === 'number') return Math.floor(raw);
@@ -31,18 +35,19 @@ const getBalance = async () => {
 const sendFaucet = async (toAddress, amountSatoshis) => {
     const wallet = await getWallet();
     const account = wallet.accountStore.getAccount('1.0');
+    if (!account) throw new Error('Cuenta 1.0 no disponible para enviar');
 
     try {
-        // ✅ Tarifa ajustada para transacciones grandes (10 NEXA = 1000 satoshis)
+        // ✅ SIN .setFee() — el SDK lo calcula automáticamente
         const tx = await wallet.newTransaction(account)
             .onNetwork('mainnet')
             .sendTo(toAddress, amountSatoshis.toString())
-            .setFee(1000) // 10 NEXA de fee (suficiente para 100 NEXA)
             .populate()
             .sign()
-            .build();
+            .build(); // ← Devuelve un string hex
 
-        return await wallet.sendTransaction(tx.serialize());
+        // ✅ Envía el string hex directamente
+        return await wallet.sendTransaction(tx); // ← ¡NO .serialize()!
     } catch (error) {
         console.error('❌ Error al enviar NEXA:', error.message);
         throw error;
@@ -52,6 +57,7 @@ const sendFaucet = async (toAddress, amountSatoshis) => {
 const getFaucetAddress = async () => {
     const wallet = await getWallet();
     const account = wallet.accountStore.getAccount('1.0');
+    if (!account) throw new Error('Cuenta 1.0 no disponible para dirección');
     return account.getNewAddress().toString();
 };
 
