@@ -10,7 +10,7 @@ const { UnitUtils } = require('libnexa-ts');
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// ✅ CORS: URLs limpias
+// ✅ CORS: URLs limpias, sin espacios
 app.use(cors({
     origin: [
         'null',
