@@ -33,11 +33,11 @@ const sendFaucet = async (toAddress, amountSatoshis) => {
     const account = wallet.accountStore.getAccount('1.0');
 
     try {
-        // ✅ Añadida tarifa mínima (1 satoshi) → ¡CLAVE PARA MAINNET!
+        // ✅ Tarifa ajustada para transacciones grandes (10 NEXA = 1000 satoshis)
         const tx = await wallet.newTransaction(account)
             .onNetwork('mainnet')
             .sendTo(toAddress, amountSatoshis.toString())
-            .setFee(1) // ⚠️ Tarifa obligatoria en mainnet
+            .setFee(1000) // 10 NEXA de fee (suficiente para 100 NEXA)
             .populate()
             .sign()
             .build();
