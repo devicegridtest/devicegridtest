@@ -57,7 +57,8 @@ app.post('/faucet', async (req, res) => {
         }
 
         const balance = await getBalance();
-        const amount = parseInt(process.env.FAUCET_AMOUNT, 10) || 1; // 1 satoshi = 0.01 NEXA
+        // En la ruta /faucet
+        const amount = parseInt(process.env.FAUCET_AMOUNT) || 10000; // 10 NEXA por defecto
 
         if (balance < amount) {
             return res.status(500).json({ 
