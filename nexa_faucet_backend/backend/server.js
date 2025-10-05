@@ -1,23 +1,22 @@
-// server.js
+// backend/server.js
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { getWallet, getBalance, sendFaucet } = require('./wallet');
-const { canRequest, saveRequest } = require('./database');
+const { getBalance, sendFaucet, getFaucetAddress } = require('./wallet');
+const { canRequest, saveRequest, db } = require('./database');
 const bech32 = require('bech32');
+const { UnitUtils } = require('libnexa-ts');
 
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// ✅ CORS: Sin espacios ni URLs mal formadas
+// ✅ CORS: URLs limpias
 app.use(cors({
     origin: [
         'null',
         'http://localhost:3000',
         'http://127.0.0.1:5500',
-        'http://127.0.0.1:8080',
-        'https://tudominio.com',           // ✅ sin espacios
-        'https://devicegridtest.org'       // ✅ sin espacios
+        'https://devicegridtest.org'
     ],
     credentials: true,
     optionsSuccessStatus: 200
@@ -31,42 +30,21 @@ app.use((req, res, next) => {
     next();
 });
 
-// Ruta raíz
-app.get('/', (req, res) => {
-    res.json({
-        message: "🚀 Nexa Faucet Backend",
-        endpoints: {
-            health: "GET /health",
-            balance: "GET /balance",
-            faucet: "POST /faucet",
-            transactions: "GET /transactions",
-            reload: "POST /reload",
-            "clear-cooldown": "POST /clear-cooldown"
-        }
-    });
-});
-
-// Ruta de salud
-app.get('/health', (req, res) => {
-    res.json({ status: 'OK', message: 'Faucet Backend Activo' });
-});
-
-// ✅ Validación de dirección Nexa
+// ✅ Validación CORREGIDA de dirección Nexa
 function isValidNexaAddress(address) {
     if (!address || typeof address !== 'string') return false;
-    const prefix = 'nexa:';
-    if (!address.startsWith(prefix)) return false;
+    if (!address.startsWith('nexa:')) return false;
 
-    const bech32Data = address.slice(prefix.length);
     try {
-        const { data } = bech32.decode(bech32Data, 702);
-        return data.length === 20; // P2WPKH
+        // Decodifica la dirección COMPLETA (con 'nexa:')
+        const { prefix } = bech32.decode(address, 90);
+        return prefix === 'nexa';
     } catch {
         return false;
     }
 }
 
-// 🚀 RUTA PRINCIPAL: Enviar fondos reales
+// 🚀 Ruta principal: Enviar fondos
 app.post('/faucet', async (req, res) => {
     const { address } = req.body;
 
@@ -87,7 +65,7 @@ app.post('/faucet', async (req, res) => {
         }
 
         const balance = await getBalance();
-        const amount = parseInt(process.env.FAUCET_AMOUNT) || 1000000;
+        const amount = parseInt(process.env.FAUCET_AMOUNT, 10) || 1; // 1 satoshi = 0.01 NEXA
 
         if (balance < amount) {
             return res.status(500).json({ 
@@ -100,55 +78,27 @@ app.post('/faucet', async (req, res) => {
             txid = await sendFaucet(address, amount);
             await saveRequest(address);
 
-            console.log(`✅ Enviado ${amount / 100000000} NEXA a ${address}. TXID: ${txid}`);
+            const amountInNEXA = UnitUtils.formatNEXA(amount); // "0.01"
+            console.log(`✅ Enviado ${amountInNEXA} NEXA a ${address}. TXID: ${txid}`);
 
-            // 📢 Notificación a Discord
-            if (process.env.DISCORD_WEBHOOK_URL) {
-                try {
-                    await fetch(process.env.DISCORD_WEBHOOK_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            embeds: [{
-                                title: "💧 ¡Nueva transacción en la faucet!",
-                                color: 5814783,
-                                fields: [
-                                    { name: "Dirección", value: `\`${address}\``, inline: true },
-                                    { name: "Monto", value: `${amount / 100000000} NEXA`, inline: true },
-                                    { name: "TXID", value: `[Ver en explorer](https://explorer.nexa.org/tx/${txid})`, inline: false } // ✅ SIN ESPACIOS
-                                ],
-                                timestamp: new Date().toISOString(),
-                                footer: { text: "Nexa Faucet" }
-                            }]
-                        })
-                    });
-                    console.log('✅ Notificación enviada a Discord');
-                } catch (err) {
-                    console.error('❌ Error enviando a Discord:', err.message);
-                }
-            }
-
-            // ✅ Respuesta exitosa
             res.json({
                 success: true,
                 txid,
                 amount,
-                message: `Enviados ${amount / 100000000} NEXA a ${address}`
+                message: `Enviados ${amountInNEXA} NEXA a ${address}`
             });
 
         } catch (sendError) {
             console.error('❌ Error al enviar transacción:', sendError.message);
             res.status(500).json({ 
-                error: 'No se pudo enviar la transacción. Verifica tu billetera o el saldo.',
-                details: sendError.message
+                error: 'No se pudo enviar la transacción. Verifica tu billetera o el saldo.'
             });
         }
 
     } catch (error) {
         console.error('❌ Error en faucet:', error.message);
         res.status(500).json({ 
-            error: 'Error interno del servidor',
-            details: process.env.NODE_ENV === 'development' ? error.message : undefined
+            error: 'Error interno del servidor'
         });
     }
 });
@@ -156,15 +106,14 @@ app.post('/faucet', async (req, res) => {
 // 🔁 Obtener saldo
 app.get('/balance', async (req, res) => {
     try {
-        const wallet = getWallet();
-        const balance = await getBalance();
-        const balanceInNEXA = (balance / 100000000).toFixed(4);
+        const balance = await getBalance(); // satoshis (entero)
+        const balanceInNEXA = UnitUtils.formatNEXA(balance); // "100500.00"
 
         res.json({
             success: true,
             balance,
             balanceInNEXA,
-            address: wallet.address
+            address: await getFaucetAddress()
         });
     } catch (error) {
         console.error('Error obteniendo saldo:', error);
@@ -174,7 +123,6 @@ app.get('/balance', async (req, res) => {
 
 // 📊 Últimas transacciones
 app.get('/transactions', (req, res) => {
-    const db = require('./database').db;
     db.all(`
         SELECT address, last_request 
         FROM requests 
@@ -196,31 +144,16 @@ app.get('/transactions', (req, res) => {
     });
 });
 
-// 🔄 Recargar faucet (simulado)
-app.post('/reload', async (req, res) => {
-    const { amount } = req.body;
-    if (!amount || !Number.isInteger(amount) || amount <= 0) {
-        return res.status(400).json({ error: 'Monto inválido' });
-    }
-    console.log(`🔁 Recargando faucet con ${amount / 100000000} NEXA`);
-    res.json({ success: true, message: `Recargado: ${amount / 100000000} NEXA` });
-});
-
 // 🧹 Limpiar cooldowns
-app.post('/clear-cooldown', async (req, res) => {
-    try {
-        const db = require('./database').db;
-        db.run('DELETE FROM requests', (err) => {
-            if (err) {
-                return res.status(500).json({ error: 'Error al limpiar cooldowns' });
-            }
-            console.log('🧹 Todos los cooldowns han sido eliminados');
-            res.json({ success: true, message: 'Cooldowns limpiados' });
-        });
-    } catch (error) {
-        console.error('❌ Error al limpiar cooldowns:', error.message);
-        res.status(500).json({ error: 'Error interno' });
-    }
+app.post('/clear-cooldown', (req, res) => {
+    db.run('DELETE FROM requests', (err) => {
+        if (err) {
+            console.error('❌ Error al limpiar cooldowns:', err.message);
+            return res.status(500).json({ error: 'Error al limpiar cooldowns' });
+        }
+        console.log('🧹 Todos los cooldowns han sido eliminados');
+        res.json({ success: true, message: 'Cooldowns limpiados' });
+    });
 });
 
 // ⛔ Ruta no encontrada
@@ -229,21 +162,6 @@ app.use('*', (req, res) => {
 });
 
 // ✅ Iniciar servidor
-try {
-    app.listen(PORT, '0.0.0.0', () => {
-        try {
-            const wallet = getWallet(); // ✅ Solo intentamos si todo está listo
-            console.log(`🚀 Faucet Backend corriendo en puerto ${PORT}`);
-            console.log(`💡 Usa POST /faucet para solicitar fondos`);
-            console.log(`📊 Saldo: GET /balance`);
-            console.log(`📡 Transacciones: GET /transactions`);
-            console.log(`🔑 Dirección de la faucet: ${wallet.address}`);
-        } catch (walletError) {
-            console.error('❌ No se pudo cargar la billetera:', walletError.message);
-            console.error('📝 Revisa tu MNEMONIC o ejecuta test-wallet.js');
-        }
-    });
-} catch (error) {
-    console.error('❌ Error fatal al iniciar servidor:', error);
-    process.exit(1);
-}
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Faucet Backend corriendo en puerto ${PORT}`);
+});
