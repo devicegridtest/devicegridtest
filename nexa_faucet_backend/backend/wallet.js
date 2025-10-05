@@ -11,12 +11,6 @@ const getWallet = async () => {
         await rostrumProvider.connect('mainnet');
         walletInstance = new Wallet(mnemonic, 'mainnet');
         await walletInstance.initialize();
-
-        // ✅ Asegura que la cuenta 1.0 exista
-        const account = walletInstance.accountStore.getAccount('1.0');
-        if (!account) {
-            await walletInstance.accountStore.createAccount('1.0');
-        }
     }
     return walletInstance;
 };
@@ -24,7 +18,7 @@ const getWallet = async () => {
 const getBalance = async () => {
     const wallet = await getWallet();
     const account = wallet.accountStore.getAccount('1.0');
-    const raw = account.balance.confirmed; // ✅ Ahora account nunca es undefined
+    const raw = account.balance.confirmed;
 
     if (typeof raw === 'number') return Math.floor(raw);
     if (typeof raw === 'string') {
@@ -39,10 +33,11 @@ const sendFaucet = async (toAddress, amountSatoshis) => {
     const account = wallet.accountStore.getAccount('1.0');
 
     try {
+        // ✅ Tarifa ajustada para transacciones grandes (10 NEXA = 1000 satoshis)
         const tx = await wallet.newTransaction(account)
             .onNetwork('mainnet')
             .sendTo(toAddress, amountSatoshis.toString())
-            .setFee(1000) // 10 NEXA de fee
+            .setFee(1000) // 10 NEXA de fee (suficiente para 100 NEXA)
             .populate()
             .sign()
             .build();
