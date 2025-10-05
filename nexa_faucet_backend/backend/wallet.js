@@ -20,28 +20,33 @@ const getBalance = async () => {
     const account = wallet.accountStore.getAccount('1.0');
     const raw = account.balance.confirmed;
 
-    // Asume que el SDK devuelve satoshis como número
     if (typeof raw === 'number') return Math.floor(raw);
-    
-    // Si es string, intenta convertir (poco probable en este SDK)
     if (typeof raw === 'string') {
         const num = parseFloat(raw);
         return isNaN(num) ? 0 : Math.floor(num);
     }
-
     return 0;
 };
 
 const sendFaucet = async (toAddress, amountSatoshis) => {
     const wallet = await getWallet();
     const account = wallet.accountStore.getAccount('1.0');
-    const tx = await wallet.newTransaction(account)
-        .onNetwork('mainnet')
-        .sendTo(toAddress, amountSatoshis.toString())
-        .populate()
-        .sign()
-        .build();
-    return await wallet.sendTransaction(tx.serialize());
+
+    try {
+        // ✅ Añadida tarifa mínima (1 satoshi) → ¡CLAVE PARA MAINNET!
+        const tx = await wallet.newTransaction(account)
+            .onNetwork('mainnet')
+            .sendTo(toAddress, amountSatoshis.toString())
+            .setFee(1) // ⚠️ Tarifa obligatoria en mainnet
+            .populate()
+            .sign()
+            .build();
+
+        return await wallet.sendTransaction(tx.serialize());
+    } catch (error) {
+        console.error('❌ Error al enviar NEXA:', error.message);
+        throw error;
+    }
 };
 
 const getFaucetAddress = async () => {
