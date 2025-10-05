@@ -4,13 +4,12 @@ const express = require('express');
 const cors = require('cors');
 const { getBalance, sendFaucet, getFaucetAddress } = require('./wallet');
 const { canRequest, saveRequest, db } = require('./database');
-const bech32 = require('bech32');
 const { UnitUtils } = require('libnexa-ts');
 
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// ✅ CORS: URLs limpias, sin espacios
+// ✅ CORS: URLs limpias
 app.use(cors({
     origin: [
         'null',
@@ -30,18 +29,11 @@ app.use((req, res, next) => {
     next();
 });
 
-// ✅ Validación CORREGIDA de dirección Nexa
+// ✅ VALIDACIÓN SIMPLE Y FUNCIONAL (¡LA CLAVE!)
 function isValidNexaAddress(address) {
     if (!address || typeof address !== 'string') return false;
-    if (!address.startsWith('nexa:')) return false;
-
-    try {
-        // Decodifica la dirección COMPLETA (con 'nexa:')
-        const { prefix } = bech32.decode(address, 90);
-        return prefix === 'nexa';
-    } catch {
-        return false;
-    }
+    const regex = /^nexa:[a-z0-9]{48,90}$/;
+    return regex.test(address);
 }
 
 // 🚀 Ruta principal: Enviar fondos
@@ -78,7 +70,7 @@ app.post('/faucet', async (req, res) => {
             txid = await sendFaucet(address, amount);
             await saveRequest(address);
 
-            const amountInNEXA = UnitUtils.formatNEXA(amount); // "0.01"
+            const amountInNEXA = UnitUtils.formatNEXA(amount);
             console.log(`✅ Enviado ${amountInNEXA} NEXA a ${address}. TXID: ${txid}`);
 
             res.json({
@@ -106,7 +98,7 @@ app.post('/faucet', async (req, res) => {
 // 🔁 Obtener saldo
 app.get('/balance', async (req, res) => {
     try {
-        const balance = await getBalance(); // satoshis (entero)
+        const balance = await getBalance(); // satoshis
         const balanceInNEXA = UnitUtils.formatNEXA(balance); // "100500.00"
 
         res.json({
