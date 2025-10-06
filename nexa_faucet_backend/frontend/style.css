@@ -83,7 +83,7 @@ header {
 .hero {
     text-align: center;
     padding: 4rem 0 2rem;
-    background: linear-gradient(rgba(15,15,19,0.5), rgba(15,15,19,0.9)), url('https://i.imgur.com/Jb7X9u8.png') center / cover no-repeat;
+    background: linear-gradient(rgba(15,15,19,0.5), rgba(15,15,19,0.9)),
 }
 
 .hero h1 {
@@ -552,3 +552,4 @@ footer p {
         transform: translateY(0);
     }
 }
+
