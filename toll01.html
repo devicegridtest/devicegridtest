@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guía Panel de Control TikTok v8.0 PRO</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Configuración de Tailwind para neón -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: {
+            'scroll': 'scroll 45s linear infinite',
+            'pulse-neon': 'pulse 2s infinite'
+          },
+          keyframes: {
+            scroll: {
+              '0%': { transform: 'translateX(0)' },
+              '100%': { transform: 'translateX(-50%)' }
+            },
+            pulse: {
+              '0%, 90%': { opacity: 1 },
+              '50%': { opacity: 0.8 }
+            }
+          },
+          boxShadow: {
+            'neon-green': '0 0 10px rgba(0, 255, 136, 0.7), 0 0 20px rgba(0, 255, 136, 0.5)',
+            'neon-cyan': '0 0 10px rgba(0, 255, 255, 0.7), 0 0 20px rgba(0, 255, 255, 0.5)',
+            'glow': '0 0 25px rgba(0, 255, 255, 0.4)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .card-future {
+      background: linear-gradient(145deg, #0a0f1d, #0f172a);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.1), inset 0 0 0 1px rgba(0, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+    .card-future:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.3), 0 0 40px rgba(138, 43, 226, 0.2);
+    }
+    .step-badge {
+      background: linear-gradient(90deg, #00b3b3, #00ffff);
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    }
+    .neon-text {
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.7), 0 0 20px rgba(0, 255, 255, 0.5);
+    }
+    .tech-tag {
+      background: rgba(0, 255, 255, 0.1);
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      box-shadow: 0 0 8px rgba(0, 255, 255, 0.2);
+    }
+    .img-glow {
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+      border: 2px solid rgba(0, 255, 255, 0.3);
+    }
+    .crypto-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      padding: 0 20px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body class="bg-black text-white min-h-screen relative">
+
+  <!-- 📊 BARRA DE CRIPTO CON VIDEO DE FONDO -->
+  <section id="crypto-container" class="relative w-full h-16 overflow-hidden mb-12">
+    <!-- Video de fondo -->
+    <video 
+      autoplay 
+      muted 
+      loop 
+      playsinline 
+      class="absolute inset-0 w-full h-full object-cover opacity-90"
+    >
+      <source src="icons/barrasuperior.mp4" type="video/mp4">
+      Tu navegador no soporta video.
+    </video>
+
+    <!-- Overlay oscuro para mejorar legibilidad -->
+    <div class="absolute inset-0 bg-black bg-opacity-0"></div>
+
+    <!-- Contenido de precios -->
+    <div id="crypto-bar" class="relative z-10 h-full flex items-center">
+      <div class="flex animate-scroll text-sm font-mono uppercase">
+        <!-- Primera copia -->
+        <div class="flex gap-8">
+          <div id="bitcoin" class="crypto-item">
+            <img src="icons/bitcoin.webp" alt="BTC" class="w-5 h-5 rounded-full" />
+            <span class="font-semibold text-yellow-400">BTC:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="ethereum" class="crypto-item">
+            <img src="icons/ethereum.logo.png" alt="ETH" class="w-5 h-5 rounded-full" />
+            <span class="font-semibold text-pink-400">ETH:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="dogecoin" class="crypto-item">
+            <img src="icons/doge.logo.jpeg" alt="DOGE" class="w-5 h-5 rounded-full" />
+            <span class="font-semibold text-yellow-400">DOGE:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="solana" class="crypto-item">
+            <img src="icons/Solana_logo.png" alt="SOL" class="w-5 h-5 rounded-full" />
+            <span class="font-semibold text-pink-400">SOL:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="litecoin" class="crypto-item">
+            <img src="icons/ltc.logo.webp" alt="LTC" class="w-5 h-5 rounded-full" />
+            <span class="font-semibold text-yellow-400">LTC:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="ripple" class="crypto-item">
+            <img src="icons/rippel.logo.png" alt="XRP" class="w-5 h-5 rounded-full" />
+            <span class="font-semibold text-pink-400">XRP:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="nexa" class="crypto-item">
+            <img src="icons/nexa.logo.jpg" alt="NEXA" class="w-5 h-5 rounded-full" />
+            <span class="font-semibold text-pink-400">NEXA:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="nodle" class="crypto-item">
+            <img src="icons/nodle_logo.jpeg" alt="NODL" class="w-5 h-5 rounded-full" />
+            <span class="font-semibold text-yellow-400">NODL:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+        </div>
+        <!-- Segunda copia (scroll infinito) -->
+        <div class="flex gap-8">
+          <div id="bitcoin" class="crypto-item">
+            <img src="icons/bitcoin.webp" alt="BTC" class="w-5 h-5 rounded-full" />
+            <span class="font-semibold text-yellow-400">BTC:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="ethereum" class="crypto-item">
+            <img src="icons/ethereum.logo.png" alt="ETH" class="w-5 h-5 rounded-full" />
+            <span class="font-semibold text-pink-400">ETH:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="dogecoin" class="crypto-item">
+            <img src="icons/doge.logo.jpeg" alt="DOGE" class="w-5 h-5 rounded-full" />
+            <span class="font-semibold text-yellow-400">DOGE:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="solana" class="crypto-item">
+            <img src="icons/Solana_logo.png" alt="SOL" class="w-5 h-5 rounded-full" />
+            <span class="font-semibold text-pink-400">SOL:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="litecoin" class="crypto-item">
+            <img src="icons/ltc.logo.webp" alt="LTC" class="w-5 h-5 rounded-full" />
+            <span class="font-semibold text-yellow-400">LTC:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="ripple" class="crypto-item">
+            <img src="icons/rippel.logo.png" alt="XRP" class="w-5 h-5 rounded-full" />
+            <span class="font-semibold text-pink-400">XRP:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="nexa" class="crypto-item">
+            <img src="icons/nexa.logo.jpg" alt="NEXA" class="w-5 h-5 rounded-full" />
+            <span class="font-semibold text-pink-400">NEXA:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+          <div id="nodle" class="crypto-item">
+            <img src="icons/nodle_logo.jpeg" alt="NODL" class="w-5 h-5 rounded-full" />
+            <span class="font-semibold text-yellow-400">NODL:</span>
+            <span class="price text-green-400">...</span>
+            <span class="change text-gray-300">...</span>
+            <span class="arrow">⏺️</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- 📘 Guía Oficial y Completa: Panel de Control TikTok v8.0 PRO -->
+<section class="py-24 px-6 bg-black text-white">
+  <div class="max-w-6xl mx-auto space-y-20">
+
+        <!-- Título -->
+    <div class="text-center space-y-6">
+      <h2 class="text-5xl md:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 neon-text">
+        🎮 Cómo Funciona el Panel de Control TikTok v8.0 PRO
+      </h2>
+      <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+        Automatiza likes, comentarios y control maestro con <strong class="text-cyan-400">ADB</strong>, <strong class="text-blue-400">scrcpy</strong> y <strong class="text-purple-400">OpenCV</strong>.
+      </p>
+      <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+        Guía <strong>completa y detallada</strong> para instalar, configurar y usar tu herramienta desde cero.  
+        Incluye ADB, Python, scrcpy, OpenCV y solución portable para usuarios sin permisos.
+      </p>
+    </div>
+    
+    <!-- Paso 1: Requisitos del Sistema -->
+    <div class="flex flex-col md:flex-row gap-12 items-center">
+      <div class="md:w-1/2 text-center">
+        <img src="icons/Image_12.png" alt="Requisitos del sistema" class="w-full rounded-2xl border border-cyan-500/50 shadow-[0_0_30px_rgba(0,255,255,0.2)] mx-auto" />
+        <p class="text-sm text-cyan-400 mt-3 font-mono">Figura 1: Requisitos mínimos del sistema</p>
+      </div>
+      <div class="md:w-1/2 space-y-6">
+        <span class="inline-block bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold">Paso 1</span>
+        <h3 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-400">⚠️ Requisitos Mínimos</h3>
+        <p class="text-gray-300 text-lg">
+          Antes de empezar, asegúrate de tener:
+        </p>
+        <ul class="text-gray-300 space-y-2 text-left pl-6 list-disc">
+          <li><strong>💻 Sistema Operativo:</strong> Windows 10/11 (recomendado). Linux y macOS funcionan, pero requieren ajustes.</li>
+          <li><strong>📱 Dispositivos Android:</strong> Mínimo 1 teléfono con Android 8.0+ y <strong>USB Debugging habilitado</strong>.</li>
+          <li><strong>🔌 Cables USB:</strong> De buena calidad. Evita cables de carga rápida sin modo de datos.</li>
+          <li><strong>🌐 Internet:</strong> Solo para la primera instalación (descargar Python, ADB, etc.).</li>
+          <li><strong>📁 Espacio en disco:</strong> 500 MB libres en el disco C:\</li>
+        </ul>
+        <div class="bg-gray-900 p-4 rounded-xl border border-yellow-500/50 text-sm text-yellow-300">
+          <strong>Nota:</strong> Si no tienes permisos de administrador, ve al Paso 5 (versión portable).
+        </div>
+      </div>
+    </div>
+
+    <!-- Paso 2: Instalar Python -->
+    <div class="flex flex-col md:flex-row-reverse gap-12 items-center">
+      <div class="md:w-1/2 text-center">
+        <img src="icons/Image_1 (2).png" alt="Instalar Python" class="w-full rounded-2xl border border-blue-500/50 shadow-[0_0_30px_rgba(0,0,255,0.2)] mx-auto" />
+        <p class="text-sm text-cyan-400 mt-3 font-mono">Figura 2: Descarga Python desde python.org</p>
+      </div>
+      <div class="md:w-1/2 space-y-6">
+        <span class="inline-block bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-bold">Paso 2</span>
+        <h3 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">🐍 Instala Python 3.11</h3>
+        <p class="text-gray-300 text-lg">
+          Tu herramienta está escrita en Python. Necesitas instalarlo correctamente.
+        </p>
+        <ol class="text-gray-300 space-y-2 text-left pl-6 list-decimal">
+          <li>Ve a <a href="https://python.org" target="_blank" class="text-cyan-400 underline">python.org</a> y descarga <strong>Python 3.11.10</strong> (evita 3.12+ por compatibilidad).</li>
+          <li>Ejecuta el instalador como administrador.</li>
+          <li><strong>¡Muy importante!</strong> Marca la casilla: <strong>"Add Python to PATH"</strong>.</li>
+          <li>Haz clic en <strong>"Install Now"</strong>.</li>
+        </ol>
+        <div class="bg-gray-900 p-4 rounded-xl border border-green-500/50 text-sm text-green-300">
+          ✅ Verifica: Abre <strong>cmd</strong> y escribe <code class="bg-gray-800 px-1">python --version</code>. Debe mostrar <code>Python 3.11.x</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- Paso 3: Instalar Dependencias -->
+    <div class="flex flex-col md:flex-row gap-12 items-center">
+      <div class="md:w-1/2 text-center">
+        <img src="icons/Image_4 (1).png" alt="Instalar dependencias" class="w-full rounded-2xl border border-green-500/50 shadow-[0_0_30px_rgba(0,255,0,0.2)] mx-auto" />
+        <p class="text-sm text-cyan-400 mt-3 font-mono">Figura 3: Instala dependencias con pip</p>
+      </div>
+      <div class="md:w-1/2 space-y-6">
+        <span class="inline-block bg-green-600 text-white px-4 py-2 rounded-full text-sm font-bold">Paso 3</span>
+        <h3 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-emerald-400">📦 Instala las Dependencias de Python</h3>
+        <p class="text-gray-300 text-lg">
+          Tu herramienta necesita varias librerías. Instálalas con <code>pip</code>.
+        </p>
+        <ol class="text-gray-300 space-y-2 text-left pl-6 list-decimal">
+          <li>Abre <strong>cmd</strong> como administrador.</li>
+          <li>Ejecuta este comando completo:</li>
+        </ol>
+        <code class="block bg-gray-900 p-4 rounded-xl text-green-400 font-mono text-sm">
+          pip install opencv-python mss numpy pillow adbutils
+        </code>
+        <p class="text-gray-400 text-sm">
+          Estas librerías permiten:
+          <ul class="pl-5 list-disc mt-1">
+            <li><strong>OpenCV</strong>: Detección de plantillas (botones de like/comentario)</li>
+            <li><strong>mss</strong>: Captura de pantalla rápida para OpenCV</li>
+            <li><strong>adbutils</strong>: Comunicación con dispositivos Android sin errores</li>
+          </ul>
+        </p>
+      </div>
+    </div>
+
+    <!-- Paso 4: Instalar ADB y scrcpy -->
+    <div class="flex flex-col md:flex-row-reverse gap-12 items-center">
+      <div class="md:w-1/2 text-center">
+        <img src="icons/Image_11.png" alt="ADB y scrcpy" class="w-full rounded-2xl border border-purple-500/50 shadow-[0_0_30px_rgba(128,0,128,0.2)] mx-auto" />
+        <p class="text-sm text-cyan-400 mt-3 font-mono">Figura 4: ADB y scrcpy en acción</p>
+      </div>
+      <div class="md:w-1/2 space-y-6">
+        <span class="inline-block bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-bold">Paso 4</span>
+        <h3 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">🔌 Instala ADB y scrcpy</h3>
+        <p class="text-gray-300 text-lg">
+          Necesitas <strong>Platform Tools</strong> para controlar los dispositivos.
+        </p>
+        <ol class="text-gray-300 space-y-2 text-left pl-6 list-decimal">
+          <li>Descarga <strong>platform-tools</strong> desde: <a href="https://developer.android.com/tools/releases/platform-tools" class="text-cyan-400 underline">developer.android.com</a></li>
+          <li>Extrae la carpeta y colócala en <code class="bg-gray-800 px-1">C:\platform-tools</code></li>
+          <li>Agrega la ruta al <strong>PATH del sistema</strong>:
+            <ul class="pl-5 list-disc mt-1">
+              <li>Busca "Variables de entorno" en el menú de inicio</li>
+              <li>Edición de variables de entorno → Variables del sistema → PATH → Editar → Nueva</li>
+              <li>Agrega: <code>C:\platform-tools</code></li>
+            </ul>
+          </li>
+        </ol>
+        <div class="bg-gray-900 p-4 rounded-xl border border-green-500/50 text-sm text-green-300">
+          ✅ Verifica: Abre cmd y escribe <code>adb version</code>. Debe mostrar la versión.
+        </div>
+      </div>
+    </div>
+
+    <!-- Paso 5: Versión Portable (Sin Instalación) -->
+    <div class="flex flex-col md:flex-row gap-12 items-center">
+      <div class="md:w-1/2 text-center">
+        <img src="icons/Image_10.png" alt="Versión portable" class="w-full rounded-2xl border border-yellow-500/50 shadow-[0_0_30px_rgba(255,255,0,0.2)] mx-auto" />
+        <p class="text-sm text-cyan-400 mt-3 font-mono">Figura 5: Versión portable en USB</p>
+      </div>
+      <div class="md:w-1/2 space-y-6">
+        <span class="inline-block bg-yellow-600 text-black px-4 py-2 rounded-full text-sm font-bold">Paso 5</span>
+        <h3 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">💾 Versión Portable (Sin Instalación)</h3>
+        <p class="text-gray-300 text-lg">
+          Si no tienes permisos de administrador (empresa, cibercafé, etc.), usa esta solución:
+        </p>
+        <ul class="text-gray-300 space-y-2 text-left pl-6 list-disc">
+          <li>Empaqueta tu app con <code class="bg-gray-800 px-1">PyInstaller</code> en un <code class="bg-gray-800 px-1">devicegrid.exe</code></li>
+          <li>Incluye una copia de <code>python-embed</code>, <code>adb.exe</code>, <code>scrcpy.exe</code></li>
+          <li>Entrega un USB con:
+            <ul class="pl-5 list-disc mt-1">
+              <li><code>iniciar.bat</code> → Ejecuta todo</li>
+              <li><code>devicegrid.exe</code> → Tu app empaquetada</li>
+              <li><code>platform-tools/</code> → ADB y scrcpy</li>
+              <li><code>templates/</code> → Plantillas predefinidas</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="bg-gray-900 p-4 rounded-xl border border-cyan-500/50 text-sm text-cyan-300">
+          ✅ Ideal para distribución masiva sin instalación.
+        </div>
+      </div>
+    </div>
+
+   <!-- Paso 6: Habilitar USB Debugging -->
+<div class="flex flex-col md:flex-row-reverse gap-8 md:gap-12 items-center justify-center px-4">
+  <div class="md:w-1/2 w-full max-w-lg text-center">
+    <img 
+      src="icons/Image_15.png" 
+      alt="Habilitar USB Debugging" 
+      class="w-full max-w-md mx-auto rounded-2xl border border-cyan-500/50 shadow-[0_0_30px_rgba(0,255,255,0.2)] hover:shadow-[0_0_40px_rgba(0,255,255,0.4)] transition-shadow duration-300" 
+    />
+    <p class="text-sm text-cyan-400 mt-3 font-mono tracking-wide">Figura 6: Habilitar USB Debugging</p>
+  </div>
+  <div class="md:w-1/2 w-full space-y-6 text-left">
+    <span class="inline-block bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-bold">Paso 6</span>
+    <h3 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-400">📱 Habilita USB Debugging</h3>
+    <p class="text-purple-300 text-lg leading-relaxed">
+      En cada teléfono:
+    </p>
+    <ol class="text-gray-300 space-y-3 text-base leading-relaxed pl-6 list-decimal">
+      <li>Ve a <strong>Ajustes → Acerca del teléfono</strong></li>
+      <li>Toca 7 veces en <strong>Número de compilación</strong> hasta que aparezca <em>“Eres un desarrollador”</em></li>
+      <li>Regresa y entra a <strong>Opciones de desarrollador</strong></li>
+      <li>Habilita <strong>Depuración USB</strong></li>
+      <li>Conecta el teléfono y acepta la clave RSA en pantalla</li>
+    </ol>
+    <div class="bg-gray-900 p-5 rounded-xl border border-green-500/50 text-sm text-green-300 mt-4">
+      <div class="flex items-start gap-2">
+        <span class="text-green-400 mt-0.5">✅</span>
+        <div>
+          <strong>Verificación:</strong> Abre tu terminal y ejecuta <code class="bg-gray-800 px-2 py-1 rounded text-green-300">adb devices</code>.<br>
+          Debe mostrar tu dispositivo con estado <code class="text-yellow-300">device</code>.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Paso 7: Ejecutar el Panel -->
+    <div class="flex flex-col md:flex-row gap-12 items-center">
+      <div class="md:w-1/2 text-center">
+        <img src="icons/Screenshot 2025-09-10 004016.png" alt="Interfaz del panel" class="w-full rounded-2xl border border-green-500/50 shadow-[0_0_30px_rgba(0,255,0,0.2)] mx-auto" />
+        <p class="text-sm text-cyan-400 mt-3 font-mono">Figura 7: Interfaz con partículas animadas</p>
+      </div>
+      <div class="md:w-1/2 space-y-6">
+        <span class="inline-block bg-green-600 text-white px-4 py-2 rounded-full text-sm font-bold">Paso 7</span>
+        <h3 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-400">▶️ Ejecuta el Panel de Control</h3>
+        <p class="text-gray-300 text-lg">
+          Ahora que todo está listo:
+        </p>
+        <ol class="text-gray-300 space-y-2 text-left pl-6 list-decimal">
+          <li>Conecta tus teléfonos.</li>
+          <li>Ejecuta <code>iniciar_servidor.bat</code> (o <code>python run_backend.py</code>).</li>
+          <li>Abre <code>index.html</code> en el navegador.</li>
+          <li>Haz clic en <strong>Open Control Panel</strong>.</li>
+        </ol>
+        <p class="text-gray-400">
+          El panel se abrirá con fondo de partículas animadas, detectará tus dispositivos y podrás usar:
+          <ul class="pl-5 list-disc mt-1">
+            <li><strong>Like Masivo</strong></li>
+            <li><strong>Control Maestro (Auto-Replica)</strong></li>
+            <li><strong>Captura de Plantillas</strong></li>
+          </ul>
+        </p>
+      </div>
+    </div>
+
+    <!-- Conclusión -->
+    <div class="text-center p-12 bg-gradient-to-b from-gray-900 to-black rounded-3xl border border-cyan-500/50 shadow-[0_0_50px_rgba(0,255,255,0.15)] mx-4 md:mx-0">
+      <h3 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 mb-6">🚀 Listo para Automatizar</h3>
+      <p class="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
+        Ahora puedes controlar múltiples dispositivos Android desde una sola interfaz, con interacción realista y sincronizada.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <span class="bg-cyan-900 text-cyan-200 px-5 py-3 rounded-full text-sm font-semibold border border-cyan-500/50">ADB</span>
+        <span class="bg-blue-900 text-blue-200 px-5 py-3 rounded-full text-sm font-semibold border border-blue-500/50">scrcpy</span>
+        <span class="bg-purple-900 text-purple-200 px-5 py-3 rounded-full text-sm font-semibold border border-purple-500/50">OpenCV</span>
+        <span class="bg-pink-900 text-pink-200 px-5 py-3 rounded-full text-sm font-semibold border border-pink-500/50">Tkinter</span>
+        <span class="bg-green-900 text-green-200 px-5 py-3 rounded-full text-sm font-semibold border border-green-500/50">Partículas Animadas</span>
+      </div>
+      <div class="mt-8 space-y-4">
+        <p class="text-sm text-gray-400">¿Necesitas ayuda?</p>
+        <a href="https://discord.gg/tc8YGfWn" target="_blank" 
+           class="inline-block bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full transition shadow-[0_0_20px_rgba(0,255,128,0.6)]">
+          💬 Únete al Discord
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script src="componentes.js"></script>
+
+</body>
+</html>
