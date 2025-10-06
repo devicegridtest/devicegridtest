@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="dark">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -45,17 +45,17 @@
     }
   </script>
 
-  <!-- Estilos personalizados -->
+  <!-- Custom styles -->
   <link rel="stylesheet" href="main.css">
 </head>
 <body class="bg-black text-white font-sans relative">
 
-  <!-- 📡 Scanline Futurista -->
+  <!-- 📡 Futuristic Scanline -->
   <div class="scanline"></div>
 
-  <!-- 📊 BARRA DE CRIPTO CON VIDEO DE FONDO -->
+  <!-- 📊 CRYPTO BAR WITH BACKGROUND VIDEO -->
   <section id="crypto-container" class="relative w-full h-16 overflow-hidden mb-12">
-    <!-- Video de fondo -->
+    <!--Video from  background -->
     <video 
       autoplay 
       muted 
@@ -64,13 +64,13 @@
       class="absolute inset-0 w-full h-full object-cover opacity-90"
     >
       <source src="icons/barrasuperior.mp4" type="video/mp4">
-      Tu navegador no soporta video.
+      Your browser does not support HTML5 video.
     </video>
 
-    <!-- Contenido de precios -->
+    <!-- Pricing Content -->
     <div id="crypto-bar" class="relative z-10 h-full flex items-center">
       <div class="flex animate-scroll text-sm font-mono uppercase">
-        <!-- Primera copia -->
+        <!-- FIRST COPY. -->
         <div class="flex gap-8">
           <div id="bitcoin" class="crypto-item">
             <img src="icons/bitcoin.webp" alt="BTC" class="w-5 h-5" />
@@ -129,7 +129,7 @@
             <span class="arrow">⏺️</span>
           </div>
         </div>
-        <!-- Segunda copia (scroll infinito) -->
+        <!-- SECOND COPY (infinite scroll) -->
         <div class="flex gap-8">
           <div id="bitcoin" class="crypto-item">
             <img src="icons/bitcoin.webp" alt="BTC" class="w-5 h-5" />
@@ -220,7 +220,7 @@
         <div class="flex flex-wrap justify-center items-center gap-4 max-w-4xl mx-auto px-4">
           <a href="toll01.html" target="_blank"
              class="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-cyan-500 hover:from-cyan-500 hover:to-green-500 text-black font-bold py-2 px-5 rounded-full transition-all duration-300 neon-btn">
-            <img src="icons/device-gamepad-2.svg" alt="Icono artículo" class="w-5 h-5"> ¿Cómo funciona?
+            <img src="icons/device-gamepad-2.svg" alt="Icono artículo" class="w-5 h-5"> ¿How it works?
           </a>
           <a href="https://hub.acurast.com/rebellion?ref=xba4aq" target="_blank"
              class="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-cyan-500 hover:from-cyan-500 hover:to-green-500 text-black font-bold py-2 px-5 rounded-full transition-all duration-300 neon-btn">
@@ -247,19 +247,19 @@
     </div>
   </header>
 
-  <!-- 🎥 Sección Principal -->
+  <!-- 🎥 Main Section -->
   <main class="relative py-20 px-6 text-white">
     <div class="max-w-6xl mx-auto space-y-20">
 
-      
-      <!-- Estado en Tiempo Real -->
+
+      <!--Real-time statusing -->
       <section class="hologram rounded-2xl p-1 animate-fadeInUp" style="animation-delay: 1.2s">
         <div class="bg-gray-900 rounded-2xl p-8">
           <h3 class="text-2xl font-bold text-cyan-400 mb-6 text-center flex items-center justify-center gap-2">
             <span>📡</span> DEVICE STATUS
           </h3>
           <div id="status-panel" class="text-gray-300 space-y-3 font-mono text-sm text-left max-w-2xl mx-auto p-4 bg-black rounded-lg">
-            Cargando...
+           Charging...
           </div>
         </div>
       </section>
@@ -272,17 +272,17 @@
           </h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             <div class="bg-gray-800 p-6 rounded-xl border border-green-500/30">
-              <h4 class="text-green-400 font-semibold mb-3 text-center">🖼️ Plantilla de Prueba</h4>
+              <h4 class="text-green-400 font-semibold mb-3 text-center">🖼️ Test Template</h4>
               <input type="file" id="template-upload" accept="image/*" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-600 file:text-white hover:file:bg-green-700 mb-3" />
               <button onclick="uploadTemplate()" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md font-semibold transition neon-btn">
-                Subir Plantilla
+                Upload template
               </button>
             </div>
             <div class="bg-gray-800 p-6 rounded-xl border border-blue-500/30">
-              <h4 class="text-blue-400 font-semibold mb-3 text-center">🎥 Video de Prueba</h4>
+              <h4 class="text-blue-400 font-semibold mb-3 text-center">🎥 Test Video</h4>
               <input type="file" id="video-upload" accept="video/*" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 mb-3" />
               <button onclick="uploadVideo()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md font-semibold transition neon-btn">
-                Subir Video
+               Upload Video
               </button>
             </div>
           </div>
@@ -316,15 +316,15 @@
     </div>
   </main>
 
-  <!-- 📞 Contacto -->
-  <section id="contacto" class="py-20 px-6">
+  <!-- 📞 Contact -->
+  <section id="contact" class="py-20 px-6">
     <div class="max-w-lg mx-auto text-center animate-fadeInUp" style="animation-delay: 1.8s">
       <h2 class="text-4xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">CONTACT SUPPORT</h2>
       <div class="hologram rounded-2xl p-1">
         <div class="bg-gray-900 rounded-2xl p-8">
           <form id="contactForm" action="https://formspree.io/f/myzjqrdg" method="POST" class="space-y-5">
             <div>
-              <label for="name" class="block text-sm font-medium text-gray-300 text-left">Nombre</label>
+              <label for="name" class="block text-sm font-medium text-gray-300 text-left">Name</label>
               <input type="text" name="name" id="name" required class="w-full px-5 py-3 rounded-lg bg-gray-800 border border-cyan-500 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400" />
             </div>
             <div>
@@ -332,11 +332,11 @@
               <input type="email" name="email" id="email" required class="w-full px-5 py-3 rounded-lg bg-gray-800 border border-cyan-500 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400" />
             </div>
             <div>
-              <label for="message" class="block text-sm font-medium text-gray-300 text-left">Mensaje</label>
+              <label for="message" class="block text-sm font-medium text-gray-300 text-left">Message</label>
               <textarea name="message" id="message" required rows="4" class="w-full px-5 py-3 rounded-lg bg-gray-800 border border-cyan-500 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"></textarea>
             </div>
             <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-cyan-500 hover:from-cyan-500 hover:to-green-500 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 neon-btn">
-              Enviar Mensaje
+              Send
             </button>
             <div id="form-message" class="mt-4 text-cyan-300 font-semibold"></div>
           </form>
@@ -357,10 +357,10 @@
   <script src="componentes.js"></script>
 
   <script>
-    // 🔗 Cambia esto por tu URL pública cuando lo despliegues
-    const API_BASE = 'http://devicegridtest.org'; // Usa 'https://tu-backend.onrender.com' en producción
+    
+    const API_BASE = 'http://devicegridtest.org'; 
 
-    // Bloquear clic derecho y atajos
+    // Lock Right Click and Shortcuts
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('keydown', e => {
       if ((e.ctrlKey || e.metaKey) && ['c', 'u', 's', 'a'].includes(e.key.toLowerCase())) {
@@ -378,9 +378,9 @@
         const data = await res.json();
         const panel = document.getElementById('status-panel');
         panel.innerHTML = `
-          <p><strong>📱 Dispositivos Activos:</strong> ${data.devices.length}</p>
-          <p><strong>❤️ Bots de Likes:</strong> ${data.bots.likes}</p>
-          <p><strong>💬 Bots de Comentarios:</strong> ${data.bots.comments}</p>
+          <p><strong>📱Active Devices:</strong> ${data.devices.length}</p>
+          <p><strong>❤️ Bots Likes:</strong> ${data.bots.likes}</p>
+          <p><strong>💬 Bots Comments:</strong> ${data.bots.comments}</p>
           ${data.devices.map(d => `<p class="text-green-400 flex items-center gap-2"><span>🟢</span> ${d}</p>`).join('')}
         `;
       } catch (e) {
@@ -391,7 +391,7 @@
 
     async function uploadTemplate() {
       const file = document.getElementById('template-upload').files[0];
-      if (!file) return alert("Selecciona un archivo primero.");
+      if (!file) return alert("Select a file first.");
       const formData = new FormData();
       formData.append('file', file);
       const res = await fetch(`${API_BASE}/upload/template`, {
@@ -399,13 +399,13 @@
         headers: getAuthHeaders(),
         body: formData
       });
-      if (res.ok) alert("✅ Plantilla subida correctamente");
-      else alert("❌ Error al subir");
+      if (res.ok) alert("✅ Template uploaded successfully");
+      else alert("❌ Upload Failed.");
     }
 
     async function uploadVideo() {
       const file = document.getElementById('video-upload').files[0];
-      if (!file) return alert("Selecciona un archivo primero.");
+      if (!file) return alert("Select a file first.");
       const formData = new FormData();
       formData.append('file', file);
       const res = await fetch(`${API_BASE}/upload/video`, {
@@ -413,20 +413,20 @@
         headers: getAuthHeaders(),
         body: formData
       });
-      if (res.ok) alert("✅ Video subido correctamente");
-      else alert("❌ Error al subir");
+      if (res.ok) alert("✅ Video uploaded successfully");
+      else alert("❌Upload Failed.");
     }
 
     function openControlPanel() {
-      if (confirm("¿Deseas iniciar el Panel de Control TikTok v8.0 PRO?")) {
+      if (confirm("¿Do you want to start the Dashboard TikTok v8.0 PRO?")) {
         fetch(`${API_BASE}/api/start`, { method: 'POST', headers: getAuthHeaders() })
           .then(res => res.json())
           .then(data => alert("✅ " + data.message))
-          .catch(() => alert("⚠️ Ejecuta 'python run_backend.py' en tu terminal"));
+          .catch(() => alert("⚠️ Run'python run_backend.py'in your terminal"));
       }
     }
 
-    // Iniciar actualización de estado
+    // Start Status Update
     document.addEventListener('DOMContentLoaded', () => {
       updateStatus();
     });
