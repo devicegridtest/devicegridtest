@@ -3,31 +3,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const requestBtn = document.getElementById('requestBtn');
     const messageDiv = document.getElementById('message');
 
-    // ✅ URL corregida — SIN ESPACIOS
+
     const API_BASE = 'https://nexa-faucet.onrender.com';
 
-    // =============== FUNCIONES DE CARGA ===============
-    function showLoader(element, text = 'Cargando...') {
-        element.innerHTML = `<div class="loader"></div>${text}`;
+    // =============== BALANCE ===============
+    async function updateBalance() {
+        try {
+            const response = await fetch(`${API_BASE}/balance`);
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+
+            const data = await response.json();
+            if (data.success && data.balanceInNEXA !== undefined) {
+                document.getElementById('balance').textContent = data.balanceInNEXA;
+            } else {
+                document.getElementById('balance').textContent = 'Error';
+            }
+        } catch (error) {
+            console.error('Error updating balance:', error);
+            document.getElementById('balance').textContent = 'Offline';
+        }
     }
 
-    function clearLoader(element, html) {
-        if (element instanceof HTMLElement) element.innerHTML = html;
-    }
+    updateBalance();
+    setInterval(updateBalance, 30000);
 
     // =============== UTILS ===============
     function showMessage(text, type) {
         messageDiv.textContent = text;
         messageDiv.className = 'message ' + type;
         messageDiv.style.display = 'block';
-        setTimeout(() => messageDiv.style.display = 'none', 8000);
-
-        // ✅ Reproduce sonido según el tipo
-        if (type === 'success') {
-            playSuccessSound();
-        } else if (type === 'error') {
-            playErrorSound();
-        }
+        setTimeout(() => {
+            messageDiv.style.display = 'none';
+        }, 8000);
     }
 
     function isValidNexaAddress(address) {
@@ -35,53 +42,22 @@ document.addEventListener('DOMContentLoaded', () => {
         return regex.test(address);
     }
 
-    // =============== FORMATO DE FECHA ===============
-    const formatDate = (timestamp) => {
-        if (!timestamp) return 'N/A';
-        const date = new Date(timestamp);
-        return date.toLocaleString('es-ES', { 
-            day: '2-digit', 
-            month: '2-digit', 
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        });
-    };
-
-    // =============== BALANCE ===============
-    async function updateBalance() {
-        const balanceElement = document.getElementById('balance');
-        if (!balanceElement) return;
-
-        try {
-            showLoader(balanceElement);
-            const response = await fetch(`${API_BASE}/balance`);
-            if (!response.ok) throw new Error('HTTP ' + response.status);
-            const data = await response.json();
-            if (data.success && data.balanceInNEXA !== undefined) {
-                // ✅ Usa el valor tal cual (ya está en NEXA)
-                clearLoader(balanceElement, `<strong>${data.balanceInNEXA}</strong> NEXA`);
-            } else {
-                clearLoader(balanceElement, 'Error');
-            }
-        } catch (error) {
-            console.error('Error actualizando saldo:', error);
-            clearLoader(balanceElement, 'Offline');
-        }
-    }
-
-    updateBalance();
-    setInterval(updateBalance, 30000);
-
-    // =============== FAUCET ===============
+    // =============== FAUCET REQUEST ===============
     requestBtn.addEventListener('click', async () => {
         const address = addressInput.value.trim();
-        if (!address) return showMessage('⚠️ Por favor ingresa una dirección.', 'error');
-        if (!isValidNexaAddress(address)) return showMessage('⚠️ Dirección Nexa inválida. Debe empezar con "nexa:"', 'error');
+
+        if (!address) {
+            showMessage('⚠️ Please enter a valid email address.', 'error');
+            return;
+        }
+
+        if (!isValidNexaAddress(address)) {
+            showMessage('⚠️ Invalid Nexa address. Must start with"nexa:"and be at least 48 characters.', 'error');
+            return;
+        }
 
         requestBtn.disabled = true;
-        requestBtn.innerHTML = '<div class="loader small"></div> Enviando...';
+        requestBtn.textContent = 'Sending...';
 
         try {
             const response = await fetch(`${API_BASE}/faucet`, {
@@ -91,165 +67,128 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const data = await response.json().catch(() => ({}));
-            if (!response.ok || !data.success) throw new Error(data.error || 'Error desconocido');
+            if (!response.ok || !data.success) {
+                throw new Error(data.error || 'Unknown error');
+            }
 
-            // ✅ El backend devuelve amount en satoshis → convertir a NEXA
-            const amount = data.amount ? (data.amount / 100).toFixed(2) : '0.00';
+            const amount = data.amount ? (data.amount / 100).toFixed(4) : '0.0000';
             const shortTxid = data.txid ? data.txid.substring(0, 12) + '...' : 'N/A';
-            showMessage(`✅ ¡Enviados ${amount} NEXA! TX: ${shortTxid}`, 'success');
+
+               // ✅ Obtener fecha y hora exacta de la transacción
+               const now = new Date();
+               const formattedDate = now.toLocaleString('en-EN', {
+                 dateStyle: 'medium',
+                 timeStyle: 'medium'
+        });
+
+
+            showMessage(`✅ Sent ${amount} NEXA! TX: ${shortTxid} 🕒 ${formattedDate}`, 'success');
 
         } catch (error) {
             console.error(error);
             showMessage('❌ ' + error.message, 'error');
         } finally {
             requestBtn.disabled = false;
-            requestBtn.textContent = 'Solicitar 100 NEXA';
+            requestBtn.textContent = 'Request 100 NEXA';
         }
     });
 
-    // =============== DONATION & TRANSACTIONS ===============
+    // =============== DONATION ADDRESS ===============
     async function loadDonationAddress() {
-        const el = document.getElementById('donationAddress');
-        if (!el) return;
-        showLoader(el, '');
+        const donationElement = document.getElementById('donationAddress');
+        if (!donationElement) return;
+
+        donationElement.textContent = 'Charging...';
+
         try {
-            const res = await fetch(`${API_BASE}/balance`);
-            const data = await res.json();
-            clearLoader(el, data.success && data.address ? `<code>${data.address}</code>` : 'No disponible');
-        } catch (err) {
-            clearLoader(el, 'Carga fallida. Inténtalo más tarde.');
+            const response = await fetch(`${API_BASE}/balance`); // ✅We use /balance, no /donation
+            if (!response.ok) throw new Error('Could not connect to server');
+
+            const data = await response.json();
+            if (data.success && data.address) {
+                donationElement.textContent = data.address;
+            } else {
+                donationElement.textContent = 'Not available';
+            }
+        } catch (error) {
+            console.error('Error loading donation address:', error);
+            donationElement.textContent = 'Upload failed, please try again later.';
         }
     }
 
+    // Copy to the clipboard
     const copyBtn = document.getElementById('copyBtn');
-    copyBtn?.addEventListener('click', () => {
-        const el = document.getElementById('donationAddress');
-        const code = el?.querySelector('code');
-        const addr = code?.textContent.trim();
-        if (!addr || addr === 'No disponible') return alert('La dirección aún no está disponible.');
-        navigator.clipboard.writeText(addr).then(() => {
-            copyBtn.textContent = '✅ Copiado!';
-            setTimeout(() => copyBtn.textContent = '📋 Copiar', 2000);
-        }).catch(() => alert('No se pudo copiar.'));
-    });
+    if (copyBtn) {
+        copyBtn.addEventListener('click', () => {
+            const donationElement = document.getElementById('donationAddress');
+            if (!donationElement) {
+                alert('Address item not found.');
+                return;
+            }
 
+            const address = donationElement.textContent.trim();
+            if (!address || address.includes('Charging') || address.includes('unsuccessful')) {
+                alert('Address is not available yet. Please wait.');
+                return;
+            }
+
+            navigator.clipboard.writeText(address).then(() => {
+                copyBtn.textContent = 'Copy!!';
+                setTimeout(() => {
+                    copyBtn.textContent = '📋 Copy';
+                }, 2000);
+            }).catch(err => {
+                console.error('Copy failed:', err);
+                alert('Failed to copy, please try manually.');
+            });
+        });
+    }
+
+    // =============== LIVE TRANSACTIONS ===============
     async function loadTransactions() {
-        const grid = document.getElementById('transactionsGrid');
-        if (!grid) return;
-        grid.innerHTML = `
-            <div class="skeleton-card"><div class="skeleton-line"></div><div class="skeleton-line"></div></div>
-            <div class="skeleton-card"><div class="skeleton-line"></div><div class="skeleton-line"></div></div>
-            <div class="skeleton-card"><div class="skeleton-line"></div><div class="skeleton-line"></div></div>
-        `;
         try {
-            const res = await fetch(`${API_BASE}/transactions`);
-            const data = await res.json();
-            const container = document.getElementById('transactionsGrid');
-            if (!container) return;
-            container.innerHTML = '';
-            if (data.success && data.transactions?.length) {
+            const response = await fetch(`${API_BASE}/transactions`);
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+
+            const data = await response.json();
+            const grid = document.getElementById('transactionsGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            if (data.success && Array.isArray(data.transactions) && data.transactions.length > 0) {
                 data.transactions.forEach(tx => {
                     const card = document.createElement('div');
                     card.className = 'transaction-card';
-                    // ✅ Fecha corregida
-                    card.innerHTML = `
-                        <h3>🔑 Dirección</h3>
-                        <div class="address">${tx.shortAddress || 'N/A'}</div>
-                        <div class="date">🕒 ${formatDate(tx.date) || 'N/A'}</div>
-                    `;
-                    container.appendChild(card);
+
+                    const title = document.createElement('h3');
+                    title.textContent = '🔑 Address';
+                    card.appendChild(title);
+
+                    const addressDiv = document.createElement('div');
+                    addressDiv.className = 'address';
+                    addressDiv.textContent = tx.shortAddress || 'N/A';
+                    card.appendChild(addressDiv);
+
+                    const dateDiv = document.createElement('div');
+                    dateDiv.className = 'date';
+                    dateDiv.textContent = '🕒 ' + (tx.date || 'N/A');
+                    card.appendChild(dateDiv);
+
+                    grid.appendChild(card);
                 });
             } else {
-                container.innerHTML = '<p style="text-align:center;color:#aaa">No hay transacciones recientes</p>';
+                grid.innerHTML = '<p style="text-align:center;color:#aaa">No hay transacciones recientes</p>';
             }
-        } catch (err) {
-            console.error('Error cargando transacciones:', err);
-            if (grid) grid.innerHTML = '<p style="text-align:center;color:#ff6b6b">Error al cargar transacciones</p>';
+        } catch (error) {
+            console.error('Error cargando transacciones:', error);
+            const grid = document.getElementById('transactionsGrid');
+            if (grid) {
+                grid.innerHTML = '<p style="text-align:center;color:#ff6b6b">Error al cargar transacciones</p>';
+            }
         }
     }
-
-    // =============== PANEL DE ADMIN ===============
-    const adminPanel = document.getElementById('adminPanel');
-    const openAdminBtn = document.getElementById('openAdminBtn');
-    const closeAdminBtn = document.getElementById('closeAdmin');
-    const loginAdminBtn = document.getElementById('loginAdmin');
-    const adminPasswordInput = document.getElementById('adminPassword');
-
-    const ADMIN_PASSWORD = atob('TmV4YUZhdWNldDIwMjUh');
-
-    openAdminBtn?.addEventListener('click', () => {
-        adminPanel.style.display = 'block';
-        adminPasswordInput.focus();
-    });
-
-    closeAdminBtn?.addEventListener('click', () => {
-        adminPanel.style.display = 'none';
-    });
-
-    loginAdminBtn?.addEventListener('click', async () => {
-        if (adminPasswordInput.value === ADMIN_PASSWORD) {
-            adminPanel.classList.add('authenticated');
-            adminPasswordInput.disabled = true;
-            loginAdminBtn.disabled = true;
-            adminPasswordInput.placeholder = "✅ Autenticado";
-            await loadAdminData();
-        } else {
-            alert('❌ Contraseña incorrecta');
-        }
-    });
-
-    async function loadAdminData() {
-        try {
-            const [balanceRes, txRes] = await Promise.all([
-                fetch(`${API_BASE}/balance`),
-                fetch(`${API_BASE}/transactions`)
-            ]);
-            const balanceData = await balanceRes.json();
-            if (balanceData.success) {
-                document.getElementById('adminAddress').textContent = balanceData.address;
-                document.getElementById('adminBalance').textContent = balanceData.balanceInNEXA;
-            }
-            const txData = await txRes.json();
-            const adminTxDiv = document.getElementById('adminTransactions');
-            if (txData.success && txData.transactions?.length) {
-                // ✅ Fecha corregida en admin
-                adminTxDiv.innerHTML = txData.transactions.map(tx => `
-                    <div style="padding:8px;border-bottom:1px solid #333;font-size:0.9rem">
-                        <strong>${tx.shortAddress}</strong><br>
-                        <small>${formatDate(tx.date)}</small>
-                    </div>
-                `).join('');
-            } else {
-                adminTxDiv.innerHTML = '<p>No hay transacciones</p>';
-            }
-        } catch (err) {
-            console.error('Error en admin:', err);
-        }
-    }
-
-    document.getElementById('clearCooldown')?.addEventListener('click', async () => {
-        if (!adminPanel.classList.contains('authenticated')) return;
-        if (!confirm('¿Limpiar todos los registros?')) return;
-        const res = await fetch(`${API_BASE}/clear-cooldown`, { method: 'POST' });
-        const data = await res.json();
-        alert(data.success ? '✅ Cooldowns limpiados' : '❌ Error: ' + data.error);
-        if (data.success) loadAdminData();
-    });
-
-    // ====== SONIDOS ======
-    const successSound = new Audio('zapsplat_foley_money_coin_throw_down_onto_table_and_very_short_spin_112888.mp3');
-    const errorSound = new Audio('zapsplat_multimedia_game_sound_low_frequency_blip_error_112553.mp3');
-
-    function playSuccessSound() {
-        successSound.currentTime = 0;
-        successSound.play().catch(e => console.log("Sonido bloqueado por el navegador"));
-    }
-
-    function playErrorSound() {
-        errorSound.currentTime = 0;
-        errorSound.play().catch(e => console.log("Sonido bloqueado por el navegador"));
-    }
-
+    
     // Inicializar
     loadDonationAddress();
     loadTransactions();
