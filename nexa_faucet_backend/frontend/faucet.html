@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- Changed lang from 'es' to 'en' -->
+<html lang="en"> 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexa Faucet | Get Free NEXA</title> <!-- Title already in English -->
+    <title>Nexa Faucet | Get Free NEXA</title> 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -12,8 +12,8 @@
     <header>
         <div class="container header-container">
             <div class="logo">💧 Nexa Faucet</div>
-            <a href="https://discord.gg/zsBukhFp" class="discord-btn" target="_blank"> <!-- Removed spaces around URL -->
-                <img src="https://devicegridtest.org/icons/brand-discord.svg" alt="Discord"> <!-- Removed spaces around URL -->
+            <a href="https://discord.gg/zsBukhFp" class="discord-btn" target="_blank"> 
+                <img src="https://devicegridtest.org/icons/brand-discord.svg" alt="Discord"> 
                 Join Discord <!-- Changed from Spanish -->
             </a>
         </div>
@@ -22,15 +22,15 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Get <strong>100 NEXA</strong> free every <strong>24 hours</strong></h1> <!-- Changed from Spanish -->
-            <p>Perfect for developers, testers, and the curious. No tricks, no spam!</p> <!-- Changed from Spanish -->
+            <h1>Get <strong>100 NEXA</strong> free every <strong>24 hours</strong></h1> 
+            <p>Perfect for developers, testers, and the curious. No tricks, no spam!</p> 
         </div>
     </section>
 
     <!-- Balance Banner -->
     <div class="container">
         <div class="balance-banner">
-            💰 Available Balance: <span id="balance">Loading...</span> NEXA <!-- Changed from Spanish -->
+            💰 Available Balance: <span id="balance">Loading...</span> NEXA 
         </div>
     </div>
 
@@ -38,10 +38,10 @@
     <section class="faucet-section">
         <div class="container">
             <div class="card">
-                <h2>⬇️ Request your NEXA</h2> <!-- Changed from Spanish -->
+                <h2>⬇️ Request your NEXA</h2>
                 <div class="faucet-form">
                     <input type="text" id="address" placeholder="nexa:your_address_here..." required>
-                    <button id="requestBtn">Request 100 NEXA</button> <!-- Changed from Spanish -->
+                    <button id="requestBtn">Request 100 NEXA</button> 
                 </div>
                 <div id="message" class="message"></div>
             </div>
@@ -51,7 +51,7 @@
     <!-- Live Transactions Section -->
     <section class="live-section">
         <div class="container">
-            <h2>📡 Recent Transactions</h2> <!-- Changed from Spanish -->
+            <h2>📡 Recent Transactions</h2> 
             <div class="live-grid" id="transactionsGrid">
                 <div class="skeleton-card"></div>
                 <div class="skeleton-card"></div>
@@ -63,26 +63,26 @@
     <!-- Guide Section -->
     <section class="guide-section">
         <div class="container">
-            <h2>📌 How it works?</h2> <!-- Changed from Spanish -->
+            <h2>📌 How it works?</h2> 
             <div class="steps">
                 <div class="step">
                     <div class="step-number">1</div>
                     <div>
-                        <h3>Get a Nexa Address</h3> <!-- Changed from Spanish -->
+                        <h3>Get a Nexa Address</h3> 
                         <p>Use a wallet like Nexa Wallet, Liquality, or create one on testnet.</p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
                     <div>
-                        <h3>Paste it above</h3> <!-- Changed from Spanish -->
+                        <h3>Paste it above</h3> 
                         <p>Copy and paste your address starting with <code>nexa:</code></p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
                     <div>
-                        <h3>Receive Funds!</h3> <!-- Changed from Spanish -->
+                        <h3>Receive Funds!</h3> 
                         <p>You'll receive 100 NEXA in seconds. Limit: once every 24 hours.</p>
                     </div>
                 </div>
@@ -93,21 +93,20 @@
     <!-- Donation Section -->
     <section class="donation-section">
         <div class="container">
-            <h2>❤️ Want to support this faucet?</h2> <!-- Changed from Spanish -->
-            <p>Donations keep this service free for everyone!</p> <!-- Changed from Spanish -->
+            <h2>❤️ Want to support this faucet?</h2> 
+            <p>Donations keep this service free for everyone!</p> >
             <div class="donation-card">
                 <div class="address-display">
-                    <code id="donationAddress">Loading...</code> <!-- Changed from Spanish -->
-                    <button id="copyBtn" class="copy-btn">📋 Copy</button> <!-- Changed from Spanish -->
+                    <code id="donationAddress">Loading...</code> 
+                    <button id="copyBtn" class="copy-btn">📋 Copy</button> 
                 </div>
-                <p class="note">Send NEXA to this address to refill the faucet.</p> <!-- Changed from Spanish -->
+                <p class="note">Send NEXA to this address to refill the faucet.</p> 
             </div>
         </div>
     </section>
 
       <!-- Scripts -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script> <!-- Removed spaces around URL -->
-
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script> 
 
     <script>
     async function onRecaptchaSuccess(token) {
@@ -116,7 +115,7 @@
         message.textContent = "Processing Request....";
 
         try {
-            const res = await fetch('https://devicegridtest.org/nexa_faucet_backend/api/claim', { // Removed spaces around URL
+            const res = await fetch('https://devicegridtest.org/nexa_faucet_backend/api/claim', { 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ address, token })
