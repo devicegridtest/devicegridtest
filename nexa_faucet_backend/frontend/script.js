@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const requestBtn = document.getElementById('requestBtn');
     const messageDiv = document.getElementById('message');
 
-
     const API_BASE = 'https://nexa-faucet.onrender.com';
 
     // =============== BALANCE ===============
@@ -42,55 +41,87 @@ document.addEventListener('DOMContentLoaded', () => {
         return regex.test(address);
     }
 
-    // =============== FAUCET REQUEST ===============
-    requestBtn.addEventListener('click', async () => {
-        const address = addressInput.value.trim();
+   // =============== FAUCET REQUEST WITH INVISIBLE reCAPTCHA ===============
+let currentAddress = '';
 
-        if (!address) {
-            showMessage('⚠️ Please enter a valid email address.', 'error');
-            return;
-        }
+// Save address in real time
+addressInput.addEventListener('input', () => {
+    currentAddress = addressInput.value.trim();
+});
 
-        if (!isValidNexaAddress(address)) {
-            showMessage('⚠️ Invalid Nexa address. Must start with"nexa:"and be at least 48 characters.', 'error');
-            return;
-        }
+// Validate and run reCAPTCHA by clicking
+requestBtn.addEventListener('click', (e) => {
+    e.preventDefault();
 
-        requestBtn.disabled = true;
-        requestBtn.textContent = 'Sending...';
+    const address = currentAddress || addressInput.value.trim();
 
-        try {
-            const response = await fetch(`${API_BASE}/faucet`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ address }),
-            });
+    if (!address) {
+        showMessage('⚠️ Please enter a Nexa address.', 'error');
+        return;
+    }
 
-            const data = await response.json().catch(() => ({}));
-            if (!response.ok || !data.success) {
-                throw new Error(data.error || 'Unknown error');
-            }
+    if (!isValidNexaAddress(address)) {
+        showMessage('⚠️ Invalid Nexa address. Must start with "nexa:" and be at least 48 characters.', 'error');
+        return;
+    }
 
-            const amount = data.amount ? (data.amount / 100).toFixed(4) : '0.0000';
-            const shortTxid = data.txid ? data.txid.substring(0, 12) + '...' : 'N/A';
+    // Temporarily save valid address
+    window.tempFaucetAddress = address;
 
-               // ✅ Obtener fecha y hora exacta de la transacción
-               const now = new Date();
-               const formattedDate = now.toLocaleString('en-EN', {
-                 dateStyle: 'medium',
-                 timeStyle: 'medium'
+    // Run reCAPTCHA invisible
+    grecaptcha.execute();
+});
+
+// This function is called ONLY if reCAPTCHA is successful
+window.onRecaptchaSuccess = async (token) => {
+    const address = window.tempFaucetAddress;
+
+    if (!address) {
+        showMessage('⚠️ Address missing. Please try again.', 'error');
+        grecaptcha.reset();
+        return;
+    }
+
+    showMessage('✅ CAPTCHA verified. Sending request...', 'success');
+    requestBtn.disabled = true;
+    requestBtn.textContent = 'Sending...';
+
+    try {
+        const response = await fetch(`${API_BASE}/faucet`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ address, recaptchaToken: token }),
         });
 
-
-            showMessage(`✅ Sent ${amount} NEXA! TX: ${shortTxid} 🕒 ${formattedDate}`, 'success');
-
-        } catch (error) {
-            console.error(error);
-            showMessage('❌ ' + error.message, 'error');
-        } finally {
-            requestBtn.disabled = false;
-            requestBtn.textContent = 'Request 100 NEXA';
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || !data.success) {
+            throw new Error(data.error || 'Unknown error');
         }
+
+        const amount = data.amount ? (data.amount / 100).toFixed(4) : '0.0000';
+        const shortTxid = data.txid ? data.txid.substring(0, 12) + '...' : 'N/A';
+        const now = new Date();
+        const formattedDate = now.toLocaleString('en-US', {
+            dateStyle: 'medium',
+            timeStyle: 'medium'
+        });
+
+        showMessage(`✅ Sent ${amount} NEXA! TX: ${shortTxid} 🕒 ${formattedDate}`, 'success');
+
+    } catch (error) {
+        console.error(error);
+        showMessage('❌ ' + error.message, 'error');
+    } finally {
+        requestBtn.disabled = false;
+        requestBtn.textContent = 'Request 100 NEXA';
+        grecaptcha.reset();
+        delete window.tempFaucetAddress;
+    }
+};
+
+    // Save the current address while the user types
+    addressInput.addEventListener('input', () => {
+        currentAddress = addressInput.value;
     });
 
     // =============== DONATION ADDRESS ===============
@@ -101,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         donationElement.textContent = 'Charging...';
 
         try {
-            const response = await fetch(`${API_BASE}/balance`); // ✅We use /balance, no /donation
+            const response = await fetch(`${API_BASE}/balance`);
             if (!response.ok) throw new Error('Could not connect to server');
 
             const data = await response.json();
@@ -116,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Copy to the clipboard
+    // Copy to clipboard
     const copyBtn = document.getElementById('copyBtn');
     if (copyBtn) {
         copyBtn.addEventListener('click', () => {
@@ -127,13 +158,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const address = donationElement.textContent.trim();
-            if (!address || address.includes('Charging') || address.includes('unsuccessful')) {
+            if (!address || address.includes('Charging') || address.includes('unsuccessful') || address === 'Not available') {
                 alert('Address is not available yet. Please wait.');
                 return;
             }
 
             navigator.clipboard.writeText(address).then(() => {
-                copyBtn.textContent = 'Copy!!';
+                copyBtn.textContent = 'Copied!';
                 setTimeout(() => {
                     copyBtn.textContent = '📋 Copy';
                 }, 2000);
@@ -178,18 +209,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     grid.appendChild(card);
                 });
             } else {
-                grid.innerHTML = '<p style="text-align:center;color:#aaa">No hay transacciones recientes</p>';
+                grid.innerHTML = '<p style="text-align:center;color:#aaa">No recent transactions</p>';
             }
         } catch (error) {
-            console.error('Error cargando transacciones:', error);
+            console.error('Error loading transactions:', error);
             const grid = document.getElementById('transactionsGrid');
             if (grid) {
-                grid.innerHTML = '<p style="text-align:center;color:#ff6b6b">Error al cargar transacciones</p>';
+                grid.innerHTML = '<p style="text-align:center;color:#ff6b6b">Error loading transactions</p>';
             }
         }
     }
-    
-    // Inicializar
+
+    // =============== INIT ===============
     loadDonationAddress();
     loadTransactions();
     setInterval(loadTransactions, 30000);

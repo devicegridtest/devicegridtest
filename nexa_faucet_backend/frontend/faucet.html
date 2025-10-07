@@ -6,6 +6,7 @@
     <title>Nexa Faucet | Get Free NEXA</title> 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
     <!-- Header -->
@@ -14,7 +15,7 @@
             <div class="logo">💧 Nexa Faucet</div>
             <a href="https://discord.gg/zsBukhFp" class="discord-btn" target="_blank"> 
                 <img src="https://devicegridtest.org/icons/brand-discord.svg" alt="Discord"> 
-                Join Discord <!-- Changed from Spanish -->
+                Join Discord 
             </a>
         </div>
     </header>
@@ -34,20 +35,25 @@
         </div>
     </div>
 
-    <!-- Faucet Form Section -->
-    <section class="faucet-section">
-        <div class="container">
-            <div class="card">
-                <h2>⬇️ Request your NEXA</h2>
-                <div class="faucet-form">
-                    <input type="text" id="address" placeholder="nexa:your_address_here..." required>
-                    <button id="requestBtn">Request 100 NEXA</button> 
+ <!-- Faucet Form Section -->
+<section class="faucet-section">
+    <div class="container">
+        <div class="card">
+            <h2>⬇️ Request your NEXA</h2>
+            <div class="faucet-form">
+                <input type="text" id="address" placeholder="nexa:your_address_here..." required>
+                <button id="requestBtn">Request 100 NEXA</button>
+                <!-- reCAPTCHA v2 Invisible -->
+                <div class="g-recaptcha"
+                     data-sitekey="6Ldsed8rAAAAAHBk-ouCW0OS3keZIxSNvmb6HAAv"
+                     data-callback="onRecaptchaSuccess"
+                     data-size="invisible">
                 </div>
-                <div id="message" class="message"></div>
             </div>
+            <div id="message" class="message"></div>
         </div>
-    </section>
-
+    </div>
+</section>
     <!-- Live Transactions Section -->
     <section class="live-section">
         <div class="container">
@@ -94,7 +100,7 @@
     <section class="donation-section">
         <div class="container">
             <h2>❤️ Want to support this faucet?</h2> 
-            <p>Donations keep this service free for everyone!</p> >
+            <p>Donations keep this service free for everyone!</p> 
             <div class="donation-card">
                 <div class="address-display">
                     <code id="donationAddress">Loading...</code> 
@@ -104,9 +110,6 @@
             </div>
         </div>
     </section>
-
-      <!-- Scripts -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script> 
 
     <script>
     async function onRecaptchaSuccess(token) {
