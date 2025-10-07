@@ -30,7 +30,7 @@
     <!-- Balance Banner -->
     <div class="container">
         <div class="balance-banner">
-            💰Available Balance: <span id="balance">Charging...</span>
+            💰Available Balance: <span id="balance">Charging...</span> 
         </div>
     </div>
 
@@ -157,14 +157,34 @@
             </p>
         </div>
     </footer> 
+
+      <script>
+             async function onRecaptchaSuccess(token) {
+        const address = document.getElementById('address').value.trim();
+        const message = document.getElementById('message');
+        message.textContent = "Processing Request....";
+
+        try {
+            const res = await fetch('https://devicegridtest.org/nexa_faucet_backend/api/claim', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ address, token })
+            });
+            const data = await res.json();
+            if (data.error) {
+                message.textContent = "⚠️ " + data.error;
+            } else {
+                message.textContent = "✅ Transaction sent: " + (data.txid || "Success");
+            }
+        } catch (e) {
+            message.textContent = "❌ Error sending application..";
+        }
+    }
+
+    </script>
       <!-- Scripts -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
-
     <script src="script.js"></script>
-
-            <!-- Disclaimer Section -->
-   
+  
 </body>
-
 </html>
