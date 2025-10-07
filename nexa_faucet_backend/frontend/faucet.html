@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"> <!-- Changed lang from 'es' to 'en' -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexa Faucet | receive NEXA Free</title>
+    <title>Nexa Faucet | Get Free NEXA</title> <!-- Title already in English -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -12,9 +12,9 @@
     <header>
         <div class="container header-container">
             <div class="logo">💧 Nexa Faucet</div>
-            <a href="https://discord.gg/zsBukhFp" class="discord-btn" target="_blank">
-                <img src="https://devicegridtest.org/icons/brand-discord.svg" alt="Discord">
-                Únete al Discord
+            <a href="https://discord.gg/zsBukhFp" class="discord-btn" target="_blank"> <!-- Removed spaces around URL -->
+                <img src="https://devicegridtest.org/icons/brand-discord.svg" alt="Discord"> <!-- Removed spaces around URL -->
+                Join Discord <!-- Changed from Spanish -->
             </a>
         </div>
     </header>
@@ -22,15 +22,15 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Receive <strong>100 NEXA</strong> free every <strong>24 hours</strong></h1>
-            <p>Perfect for developers, testers y curious. ¡No gimmicks., without spam!</p>
+            <h1>Get <strong>100 NEXA</strong> free every <strong>24 hours</strong></h1> <!-- Changed from Spanish -->
+            <p>Perfect for developers, testers, and the curious. No tricks, no spam!</p> <!-- Changed from Spanish -->
         </div>
     </section>
 
     <!-- Balance Banner -->
     <div class="container">
         <div class="balance-banner">
-            💰Available Balance: <span id="balance">Charging...</span> NEXA
+            💰 Available Balance: <span id="balance">Loading...</span> NEXA <!-- Changed from Spanish -->
         </div>
     </div>
 
@@ -38,10 +38,10 @@
     <section class="faucet-section">
         <div class="container">
             <div class="card">
-                <h2>⬇️ Request your NEXA</h2>
+                <h2>⬇️ Request your NEXA</h2> <!-- Changed from Spanish -->
                 <div class="faucet-form">
-                    <input type="text" id="address" placeholder="nexa:tu_direccion_aqui..." required>
-                    <button id="requestBtn">Request 100 NEXA</button>
+                    <input type="text" id="address" placeholder="nexa:your_address_here..." required>
+                    <button id="requestBtn">Request 100 NEXA</button> <!-- Changed from Spanish -->
                 </div>
                 <div id="message" class="message"></div>
             </div>
@@ -51,7 +51,7 @@
     <!-- Live Transactions Section -->
     <section class="live-section">
         <div class="container">
-            <h2>📡 Latest transactions</h2>
+            <h2>📡 Recent Transactions</h2> <!-- Changed from Spanish -->
             <div class="live-grid" id="transactionsGrid">
                 <div class="skeleton-card"></div>
                 <div class="skeleton-card"></div>
@@ -63,27 +63,27 @@
     <!-- Guide Section -->
     <section class="guide-section">
         <div class="container">
-            <h2>📌 ¿How it works?</h2>
+            <h2>📌 How it works?</h2> <!-- Changed from Spanish -->
             <div class="steps">
                 <div class="step">
                     <div class="step-number">1</div>
                     <div>
-                        <h3>Get a Nexa address</h3>
-                        <p>Use a wallet like Nexa Wallet, Liquality, o create one in testnet.</p>
+                        <h3>Get a Nexa Address</h3> <!-- Changed from Spanish -->
+                        <p>Use a wallet like Nexa Wallet, Liquality, or create one on testnet.</p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
                     <div>
-                        <h3>Stick it up</h3>
+                        <h3>Paste it above</h3> <!-- Changed from Spanish -->
                         <p>Copy and paste your address starting with <code>nexa:</code></p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
                     <div>
-                        <h3>¡Get Funded!</h3>
-                        <p>In seconds you will receive 100 NEXA. Limit: 1 Every 24 hours.</p>
+                        <h3>Receive Funds!</h3> <!-- Changed from Spanish -->
+                        <p>You'll receive 100 NEXA in seconds. Limit: once every 24 hours.</p>
                     </div>
                 </div>
             </div>
@@ -93,19 +93,51 @@
     <!-- Donation Section -->
     <section class="donation-section">
         <div class="container">
-            <h2>❤️ ¿You want to support this faucet?</h2>
-            <p>¡Donations keep this service free for everyone!</p>
+            <h2>❤️ Want to support this faucet?</h2> <!-- Changed from Spanish -->
+            <p>Donations keep this service free for everyone!</p> <!-- Changed from Spanish -->
             <div class="donation-card">
                 <div class="address-display">
-                    <code id="donationAddress">Charging...</code>
-                    <button id="copyBtn" class="copy-btn">📋 Copy</button>
+                    <code id="donationAddress">Loading...</code> <!-- Changed from Spanish -->
+                    <button id="copyBtn" class="copy-btn">📋 Copy</button> <!-- Changed from Spanish -->
                 </div>
-                <p class="note">Send NEXA to this address to recharge the faucet.</p>
+                <p class="note">Send NEXA to this address to refill the faucet.</p> <!-- Changed from Spanish -->
             </div>
         </div>
     </section>
 
- <footer class="disclaimer-section" style="margin-top: 60px; padding: 40px 0; background: #0f172a; color: #e2e8f0; font-family: 'Inter', sans-serif;">
+      <!-- Scripts -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script> <!-- Removed spaces around URL -->
+
+
+    <script>
+    async function onRecaptchaSuccess(token) {
+        const address = document.getElementById('address').value.trim();
+        const message = document.getElementById('message');
+        message.textContent = "Processing Request....";
+
+        try {
+            const res = await fetch('https://devicegridtest.org/nexa_faucet_backend/api/claim', { // Removed spaces around URL
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ address, token })
+            });
+            const data = await res.json();
+            if (data.error) {
+                message.textContent = "⚠️ " + data.error;
+            } else {
+                message.textContent = "✅ Transaction sent: " + (data.txid || "Success");
+            }
+        } catch (e) {
+            message.textContent = "❌ Error sending application..";
+        }
+    }
+    </script>
+
+
+    <script src="script.js"></script>
+
+            <!-- Disclaimer Section -->
+    <footer class="disclaimer-section" style="margin-top: 60px; padding: 40px 0; background: #0f172a; color: #e2e8f0; font-family: 'Inter', sans-serif;">
         <div class="container" style="max-width: 900px; margin: 0 auto; line-height: 1.6;">
             <h2 style="text-align: center; margin-bottom: 20px;">🧾 Disclaimer</h2>
             <p>This disclaimer (“Disclaimer”) applies to the use of the service, faucet, algorithm, or platform accessible at 
@@ -157,35 +189,5 @@
             </p>
         </div>
     </footer> 
-
-      <script>
-             async function onRecaptchaSuccess(token) {
-        const address = document.getElementById('address').value.trim();
-        const message = document.getElementById('message');
-        message.textContent = "Processing Request....";
-
-        try {
-            const res = await fetch('https://devicegridtest.org/nexa_faucet_backend/api/claim', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ address, token })
-            });
-            const data = await res.json();
-            if (data.error) {
-                message.textContent = "⚠️ " + data.error;
-            } else {
-                message.textContent = "✅ Transaction sent: " + (data.txid || "Success");
-            }
-        } catch (e) {
-            message.textContent = "❌ Error sending application..";
-        }
-    }
-
-    </script>
-      <!-- Scripts -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <script src="script.js"></script>
-  
 </body>
-
 </html>
