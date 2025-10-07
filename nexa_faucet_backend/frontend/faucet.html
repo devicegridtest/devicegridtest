@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexa Faucet | Recibe NEXA Gratis</title>
+    <title>Nexa Faucet | receive NEXA Free</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -22,15 +22,15 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Recibe <strong>100 NEXA</strong> gratis cada <strong>24 horas</strong></h1>
-            <p>Perfecto para desarrolladores, testers y curiosos. ¡Sin trucos, sin spam!</p>
+            <h1>Receive <strong>100 NEXA</strong> free every <strong>24 hours</strong></h1>
+            <p>Perfect for developers, testers y curious. ¡No gimmicks., without spam!</p>
         </div>
     </section>
 
     <!-- Balance Banner -->
     <div class="container">
         <div class="balance-banner">
-            💰 Saldo disponible: <span id="balance">Cargando...</span>
+            💰Available Balance: <span id="balance">Charging...</span> NEXA
         </div>
     </div>
 
@@ -38,29 +38,20 @@
     <section class="faucet-section">
         <div class="container">
             <div class="card">
-                <h2>⬇️ Solicita tus NEXA</h2>
+                <h2>⬇️ Request your NEXA</h2>
                 <div class="faucet-form">
                     <input type="text" id="address" placeholder="nexa:tu_direccion_aqui..." required>
-
-                    <!-- Botón con reCAPTCHA invisible -->
-                    <button
-                        class="g-recaptcha"
-                        id="requestBtn"
-                        data-sitekey="6Ldsed8rAAAAAHBk-ouCW0OS3keZIxSNvmb6HAAv"
-                        data-callback="onRecaptchaSuccess"
-                        data-action="faucet_request">
-                        Solicitar 100 NEXA
-                    </button>
+                    <button id="requestBtn">Request 100 NEXA</button>
                 </div>
                 <div id="message" class="message"></div>
             </div>
         </div>
     </section>
 
-    <!-- Secciones restantes (sin cambios visuales) -->
+    <!-- Live Transactions Section -->
     <section class="live-section">
         <div class="container">
-            <h2>📡 Últimas transacciones</h2>
+            <h2>📡 Latest transactions</h2>
             <div class="live-grid" id="transactionsGrid">
                 <div class="skeleton-card"></div>
                 <div class="skeleton-card"></div>
@@ -69,84 +60,52 @@
         </div>
     </section>
 
+    <!-- Guide Section -->
     <section class="guide-section">
         <div class="container">
-            <h2>📌 ¿Cómo funciona?</h2>
+            <h2>📌 ¿How it works?</h2>
             <div class="steps">
                 <div class="step">
                     <div class="step-number">1</div>
                     <div>
-                        <h3>Obtén una dirección Nexa</h3>
-                        <p>Usa una cartera como Nexa Wallet, Otoplo o Wally Nexa Wallet en Android/iOS.</p>
+                        <h3>Get a Nexa address</h3>
+                        <p>Use a wallet like Nexa Wallet, Liquality, o create one in testnet.</p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
                     <div>
-                        <h3>Pégala arriba</h3>
-                        <p>Copia y pega tu dirección que empieza con <code>nexa:</code></p>
+                        <h3>Stick it up</h3>
+                        <p>Copy and paste your address starting with <code>nexa:</code></p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
                     <div>
-                        <h3>¡Recibe fondos!</h3>
-                        <p>En segundos recibirás 100 NEXA. Límite: 1 vez cada 24 horas.</p>
+                        <h3>¡Get Funded!</h3>
+                        <p>In seconds you will receive 100 NEXA. Limit: 1 Every 24 hours.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Donation Section -->
     <section class="donation-section">
         <div class="container">
-            <h2>❤️ ¿Quieres apoyar esta faucet?</h2>
-            <p>¡Donaciones mantienen este servicio gratis para todos!</p>
+            <h2>❤️ ¿You want to support this faucet?</h2>
+            <p>¡Donations keep this service free for everyone!</p>
             <div class="donation-card">
                 <div class="address-display">
-                    <code id="donationAddress">Cargando...</code>
-                    <button id="copyBtn" class="copy-btn">📋 Copiar</button>
+                    <code id="donationAddress">Charging...</code>
+                    <button id="copyBtn" class="copy-btn">📋 Copy</button>
                 </div>
-                <p class="note">Envía NEXA a esta dirección para recargar la faucet.</p>
+                <p class="note">Send NEXA to this address to recharge the faucet.</p>
             </div>
         </div>
     </section>
 
-    <!-- Admin panel (igual que antes) -->
-    <div id="adminPanel" class="admin-panel">
-        ...
-    </div>
-    <button id="openAdminBtn" class="admin-btn">🛠️ Admin</button>
-
-    <!-- Scripts -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <script>
-    async function onRecaptchaSuccess(token) {
-        const address = document.getElementById('address').value.trim();
-        const message = document.getElementById('message');
-        message.textContent = "Procesando solicitud...";
-
-        try {
-            const res = await fetch('https://devicegridtest.org/nexa_faucet_backend/api/claim', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ address, token })
-            });
-            const data = await res.json();
-            if (data.error) {
-                message.textContent = "⚠️ " + data.error;
-            } else {
-                message.textContent = "✅ Transacción enviada: " + (data.txid || "Éxito");
-            }
-        } catch (e) {
-            message.textContent = "❌ Error al enviar solicitud.";
-        }
-    }
-    </script>
-    <script src="script.js"></script>
-
-        <!-- Disclaimer Section -->
-    <footer class="disclaimer-section" style="margin-top: 60px; padding: 40px 0; background: #0f172a; color: #e2e8f0; font-family: 'Inter', sans-serif;">
+ <footer class="disclaimer-section" style="margin-top: 60px; padding: 40px 0; background: #0f172a; color: #e2e8f0; font-family: 'Inter', sans-serif;">
         <div class="container" style="max-width: 900px; margin: 0 auto; line-height: 1.6;">
             <h2 style="text-align: center; margin-bottom: 20px;">🧾 Disclaimer</h2>
             <p>This disclaimer (“Disclaimer”) applies to the use of the service, faucet, algorithm, or platform accessible at 
@@ -197,11 +156,14 @@
                 If you do not agree with these terms, please do not use the Service.
             </p>
         </div>
-    </footer>
+    </footer> 
+      <!-- Scripts -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
+
+    <script src="script.js"></script>
+
+            <!-- Disclaimer Section -->
+   
 </body>
 </html>
-
-
-
-
